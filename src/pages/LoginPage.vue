@@ -20,10 +20,13 @@
     />
     <q-icon name="check_circle" class="text-green" style="font-size: 250px;" v-if="isSuccess" />
     <q-icon name="warning" class="text-red" style="font-size: 250px;" v-if="isFail" />
+    <h5>{{test}}</h5>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'LoginPage',
   data () {
@@ -31,7 +34,8 @@ export default {
       isLoading: false,
       isSuccess: false,
       isFail: false,
-      cacid: ''
+      cacid: '',
+      test: ''
     }
   },
   methods: {
@@ -44,7 +48,10 @@ export default {
         self.isSuccess = true
         self.cacid = ''
         setTimeout(() => {
-          self.$router.replace('/admin')
+          // self.$router.replace('/admin')
+          axios.get('http://127.0.0.1:8081/api/test').then((response) => {
+            console.log(response)
+          })
           self.isSuccess = false
         }, 200)
       }, 2000)

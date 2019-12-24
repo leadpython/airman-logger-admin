@@ -2,6 +2,13 @@
 const routes = [
   {
     path: '/',
+    component: () => import('layouts/BlankLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LoginPage.vue') }
+    ]
+  },
+  {
+    path: '/admin',
     component: () => import('layouts/MyLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') }

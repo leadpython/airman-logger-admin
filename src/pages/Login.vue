@@ -41,6 +41,7 @@ export default {
           self.cacid = ''
           setTimeout(() => {
             self.isSuccess = false
+            self.$router.replace('/super-admin')
           }, 200)
         }, 2000)
       }, 500)
@@ -61,29 +62,29 @@ export default {
     height: 100vh;
     left: 0;
     top: 0;
-    background: white;
+    background: rgba(255,255,255,0.25);
     justify-content: center;
     align-items: center;
     img {
       height: auto;
-      width: 20%;
+      width: 30%;
     }
   }
 }
 
 @keyframes fade {
-  0% { opacity: 1.0; }
-  25% { opacity: 0.5; }
-  50% { opacity: 0.1; }
-  75% { opacity: 0.5; }
-  100% { opacity: 1.0 }
+  0% { opacity: 0.5; }
+  25% { opacity: 0.25; }
+  50% { opacity: 0.05; }
+  75% { opacity: 0.25; }
+  100% { opacity: 0.5 }
 }
 @-webkit-keyframes fade {
-  0% { opacity: 0.1; }
-  25% { opacity: 0.5; }
-  50% { opacity: 1; }
-  75% { opacity: 0.5; }
-  100% { opacity: 0.1 }
+  0% { opacity: 0.5; }
+  25% { opacity: 0.25; }
+  50% { opacity: 0.05; }
+  75% { opacity: 0.25; }
+  100% { opacity: 0.5 }
 }
 .blink {
   animation:fade 3000ms infinite;

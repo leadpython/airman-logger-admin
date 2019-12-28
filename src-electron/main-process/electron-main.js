@@ -33,6 +33,8 @@ function createWindow () {
     mainWindow = null
   })
 
+  mainWindow.setFullScreen(true)
+
   api.initialize()
 }
 

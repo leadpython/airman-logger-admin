@@ -1,0 +1,81 @@
+const db = require('./db.js')
+import Result from './Result.js'
+
+exports.getStatuses = (request, response) => {
+  db.many(`
+    SELECT * FROM status;
+  `).then((data) => {
+      response.json(new Result({
+        data, status: true, message: 'Statuses retrieved!'
+    })).catch(error => {
+      response.json(new Result({
+        data: error, status: false, message: 'Failed to retrieve statuss!'
+      }))
+    })
+  })
+}
+
+exports.addStatus = (request, response) => {
+  const { status, description, admin } = request.body
+  db.none(`
+    INSERT INTO status (
+      room,
+      description,
+      created_by,
+      date_time_created,
+      updated_by,
+      date_time_updated
+    ) VALUES (
+      '${status}',
+      '${description}',
+      '${admin}',
+      current_timestamp,
+      '${admin}',
+      current_timestamp
+    );
+  `).then((data) => {
+      response.json(new Result({
+        data, status: true, message: 'Status added!'
+    })).catch(error => {
+      response.json(new Result({
+        data: error, status: false, message: 'Failed to add status!'
+      }))
+    })
+  })
+}
+
+exports.updateStatus = (request, response) => {
+  const { status, description, admin } = request.body
+  db.none(`
+    UPDATE status
+    SET
+      description='${description}',
+      updated_by='${admin}',
+      date_time_updated=current_timestamp
+    WHERE
+      status='${status}';
+  `).then((data) => {
+      response.json(new Result({
+        data, status: true, message: 'Status updated!'
+    })).catch(error => {
+      response.json(new Result({
+        data: error, status: false, message: 'Failed to update status!'
+      }))
+    })
+  })
+}
+
+exports.removeStatus = (request, response) => {
+  const { status } = request.body
+  db.none(`
+    DELETE FROM status WHERE status='${status}'
+  `).then((data) => {
+      response.json(new Result({
+        data, status: true, message: 'Status removed!'
+    })).catch(error => {
+      response.json(new Result({
+        data: error, status: false, message: 'Failed to remove status!'
+      }))
+    })
+  })
+}

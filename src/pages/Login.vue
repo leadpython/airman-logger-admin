@@ -7,7 +7,7 @@
       square
       outlined
       @input="scan"
-      v-if="!isLoading && !isSuccess"
+      v-if="!isLoading"
       style="padding: 10px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 0px;"
     />
     <q-icon name="warning" class="text-red" style="font-size: 250px;" v-if="isFail" />
@@ -87,8 +87,8 @@ export default {
   100% { opacity: 0.5 }
 }
 .blink {
-  animation:fade 3000ms infinite;
-  -webkit-animation:fade 3000ms infinite;
+  animation:fade 1500ms infinite;
+  -webkit-animation:fade 1500ms infinite;
 }
 
 </style>

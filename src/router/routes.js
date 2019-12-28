@@ -11,7 +11,13 @@ const routes = [
     path: '/super-admin',
     component: () => import('layouts/SuperAdminLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Airman.vue') },
+      { path: 'squadron', component: () => import('pages/Squadron.vue') },
+      { path: 'room', component: () => import('pages/Room.vue') },
+      { path: 'phase', component: () => import('pages/Phase.vue') },
+      { path: 'status', component: () => import('pages/Status.vue') },
+      { path: 'activity', component: () => import('pages/Activity.vue') },
+      { path: 'user', component: () => import('pages/User.vue') }
     ]
   }
 ]

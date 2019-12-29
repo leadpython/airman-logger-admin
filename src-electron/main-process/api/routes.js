@@ -5,6 +5,7 @@ const room = require('./models/room.js')
 const phase = require('./models/phase.js')
 const squadron = require('./models/squadron.js')
 const status = require('./models/status.js')
+const scan = require('./models/scan.js')
 
 router.post('/airman/add', (request, response) => {
   airman.addAirman(request, response)
@@ -66,5 +67,9 @@ router.post('/status/remove', (request, response) => {
   status.removeStatus(request, response)
 })
 
+// SCAN
+router.post('/scan', (request, response) => {
+  scan.addScanTransactions(request, response)
+})
 
 module.exports = router;

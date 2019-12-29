@@ -37,10 +37,12 @@ exports.addScanTransactions = (request, response) => {
             isIn: !is_in,
             date: (new Date())
           }, status: true, message: 'Airman found!' })
+        }).catch(error => {
+          console.log(error)
         })
+      }).catch(error => {
+        console.log(error)
       })
-
-
     }
   }).catch(error => {
     response.json({ data: error, status: false, message: 'Airman not found!' })

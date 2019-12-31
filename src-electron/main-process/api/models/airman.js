@@ -1,23 +1,18 @@
 const db = require('./db.js')
-const Result = require('./Result.js')
 
-exports.getAirman = (request, response) => {
+exports.getAirmen = (request, response) => {
   const { airman_internal_id } = request.body
-  db.one(`
-    SELECT * FROM airman WHERE airman_internal_id='${airman_internal_id}'
-  `).then((data) => {
-    response.json(new Result({
-      data, status: true, message: 'Airman retrieved!'
-    })).catch(error => {
-      response.json(new Result({
-        data: error, status: false, message: 'Failed to retrieve airman!'
-      }))
-    })
+  db.many(`
+    SELECT * FROM airman_master
+  `).then(data => {
+    response.json({ data, status: true, message: 'Airman retrieved!' })
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Failed to retrieve Airman!' })
   })
 }
 
 exports.addAirman = (request, response) => {
-  const { cacid, lastName, firstName, middleName, roomNumber, phase, status, squadron, createdBy, updatedBy } = request.body
+  const { cacid, last_name, first_name, middle_name, room_number, phase, status, squadron, admin } = request.body
   db.none(`
     INSERT INTO airman_master (
       cacid,
@@ -35,72 +30,71 @@ exports.addAirman = (request, response) => {
       is_in
     ) VALUES (
       '${cacid}',
-      '${lastName}',
-      '${firstName}',
-      '${middleName}',
-      '${roomNumber}',
+      '${last_name}',
+      '${first_name}',
+      '${middle_name}',
+      '${room_number}',
       '${phase}',
       '${status}',
       '${squadron}',
       current_timestamp,
-      '${createdBy}',
+      '${admin}',
       current_timestamp,
-      '${updatedBy},
+      '${admin}',
       TRUE
     )
-  `).then(() => {
-    response.json(new Result({
-      data: {}, status: true, message: 'Airman added!'
-    })).catch(error => {
-      response.json(new Result({
-        data: error, status: false, message: 'Failed to add airman!'
-      }))
-    })
+  `).then(data => {
+    response.json({ data, status: true, message: 'Airman added!' })
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Failed to add Airman!' })
   })
 }
 
-exports.modifyAirman = (request, response) => {
-  const { lastName, firstName, middleName, roomNumber, phase, status, squadron, updatedBy } = request.body
-  // authenticate
+exports.updateAirman = (request, response) => {
+  const { cacid, last_name, first_name, middle_name, room_number, phase, status, squadron, admin } = request.body
   db.none(`
-    UPDATE airman
+    UPDATE airman_master
     SET
-      last_name='${lastName}',
-      first_name='${firstName}',
-      middle_name='${middleName}',
-      room_number='${roomNumber}',
+      last_name='${last_name}',
+      first_name='${first_name}',
+      middle_name='${middle_name}',
+      room_number='${room_number}',
+      status='${status}',
       phase='${phase}',
       squadron='${squadron}',
       date_time_updated=current_timestamp,
-      updated_by='${updatedBy}'
+      updated_by='${admin}'
     WHERE
       cacid='${cacid}'
-  `).then(() => {
-    response.json(new Result({
-      data: {}, status: true, message: 'Airman information updated!'
-    })).catch(error => {
-      response.json(new Result({
-        data: error, status: false, message: 'Failed to update airman information!'
-      }))
-    })
+  `).then(data => {
+    response.json({ data, status: true, message: 'Airman updated!' })
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Failed to update Airman!' })
   })
 }
 
 exports.replaceAirmanCACID = (request, response) => {
   const { airman_internal_id, cacid } = request.body
   db.none(`
-    UPDATE airman
+    UPDATE airman_master
     SET
       cacid='${cacid}'
     WHERE
       airman_internal_id='${airman_internal_id}'
-  `).then(() => {
-    response.json(new Result({
-      data: {}, status: true, message: 'Airman CACID replaced!'
-    })).catch(error => {
-      response.json(new Result({
-        data: error, status: false, message: 'Failed to replace CACID!'
-      }))
-    })
+  `).then(data => {
+    response.json({ data, status: true, message: 'CACID replaced!' })
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Failed to replace CACID!' })
+  })
+}
+
+exports.removeAirman = (request, response) => {
+  const { airman_internal_id } = request.body
+  db.none(`
+    DELETE FROM airman_master WHERE airman_internal_id='${airman_internal_id}'
+  `).then(data => {
+      response.json({ data, status: true, message: 'Phase removed!' })
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Phase failed to remove!' })
   })
 }

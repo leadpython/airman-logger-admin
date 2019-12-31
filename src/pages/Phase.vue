@@ -55,7 +55,7 @@
     <q-dialog v-model="showPhaseProfile" persistent square transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-black" style="width: 400px">
         <q-card-section>
-          <div class="text-h6">{{`${selectedPhase.firstName} ${selectedPhase.lastName}`}}</div>
+          <div class="text-h6">Phase</div>
         </q-card-section>
 
         <q-card-section>
@@ -67,10 +67,13 @@
             <label>Description</label>
             <q-input v-model="selectedPhase.description" square dense outlined :disable="!isEditMode" />
           </div>
+          <div class="add-phase-row">
+            <label style="color: red;">{{errorMessage}}</label>
+          </div>
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-primary">
-          <q-btn color="negative" flat label="Remove Phase" v-close-popup @click="removePhase" v-if="!isEditMode" />
+          <q-btn color="negative" flat label="Remove Phase" @click="removePhase" v-if="!isEditMode" />
           <q-btn flat label="Close" v-close-popup v-if="!isEditMode" />
           <q-btn flat label="Edit" @click="isEditMode = true" v-if="!isEditMode" />
           <q-btn flat label="Cancel" @click="isEditMode = false" v-if="isEditMode" />
@@ -94,16 +97,13 @@ export default {
       selectedPhase: {},
       isEditMode: false,
       isAddingPhase: false,
+      errorMessage: '',
       pagination: {
         rowsPerPage: 0
       },
       columns: [
         { name: 'phase', label: 'Phase', align: 'left', field: 'phase' },
-        { name: 'description', label: 'Description', align: 'left', field: 'description' },
-        { name: 'date_time_created', label: 'Created On', align: 'left', field: 'date_time_created' },
-        { name: 'created_by', label: 'Created By', align: 'left', field: 'created_by' },
-        { name: 'date_time_updated', label: 'Updated On', align: 'left', field: 'date_time_updated' },
-        { name: 'updated_by', label: 'Updated By', align: 'left', field: 'updated_by' }
+        { name: 'description', label: 'Description', align: 'left', field: 'description' }
       ]
     }
   },
@@ -114,14 +114,15 @@ export default {
   },
   methods: {
     addPhase () {
-      this.isAddingPhase = true
-      this.$store.dispatch('phase/addPhase', {
-        phase: this.phase,
-        description: this.description
+      const self = this
+      self.isAddingPhase = true
+      self.$store.dispatch('phase/addPhase', {
+        phase: self.phase,
+        description: self.description
       }).then(data => {
-        this.isAddingPhase = false
-        this.phase = ''
-        this.description = ''
+        self.isAddingPhase = false
+        self.phase = ''
+        self.description = ''
       })
     },
     editPhase () {
@@ -131,10 +132,20 @@ export default {
     viewPhase (event, row) {
       this.showPhaseProfile = true
       this.selectedPhase = JSON.parse(JSON.stringify(row))
+      this.errorMessage = ''
     },
     removePhase () {
+      const self = this
       this.isEditMode = false
-      this.$store.dispatch('phase/removePhase', this.selectedPhase)
+      this.$store.dispatch('phase/removePhase', this.selectedPhase).then(data => {
+        const { status } = data
+        if (status) {
+          self.showPhaseProfile = false
+        } else {
+          self.showPhaseProfile = true
+          self.errorMessage = 'Cannot delete phase.'
+        }
+      })
     }
   }
 }
@@ -148,7 +159,6 @@ export default {
   label {
     font-size: 12px;
     color: rgb(100,100,100);
-
   }
 }
 </style>

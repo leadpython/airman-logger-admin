@@ -17,7 +17,8 @@ const routes = [
       { path: 'phase', component: () => import('pages/Phase.vue') },
       { path: 'status', component: () => import('pages/Status.vue') },
       { path: 'activity', component: () => import('pages/Activity.vue') },
-      { path: 'user', component: () => import('pages/User.vue') }
+      { path: 'user', component: () => import('pages/User.vue') },
+      { path: 'reporting', component: () => import('pages/Reporting.vue') }
     ]
   }
 ]

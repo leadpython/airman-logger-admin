@@ -6,9 +6,23 @@ const phase = require('./models/phase.js')
 const squadron = require('./models/squadron.js')
 const status = require('./models/status.js')
 const scan = require('./models/scan.js')
+const report = require('./models/report.js')
 
+// AIRMAN
+router.get('/airman/get', (request, response) => {
+  airman.getAirmen(request, response)
+})
 router.post('/airman/add', (request, response) => {
   airman.addAirman(request, response)
+})
+router.post('/airman/update', (request, response) => {
+  airman.updateAirman(request, response)
+})
+router.post('/airman/remove', (request, response) => {
+  airman.removeAirman(request, response)
+})
+router.post('/airman/replace-cacid', (request, response) => {
+  airman.replaceAirmanCACID(request, response)
 })
 
 // ROOM
@@ -70,6 +84,14 @@ router.post('/status/remove', (request, response) => {
 // SCAN
 router.post('/scan', (request, response) => {
   scan.addScanTransactions(request, response)
+})
+
+// REPORT
+router.get('/report/signed-in', (request, response) => {
+  report.reportSignedIn(request, response)
+})
+router.get('/report/signed-out', (request, response) => {
+  report.reportSignedOut(request, response)
 })
 
 module.exports = router;

@@ -3,8 +3,14 @@ import axios from 'axios'
 export function getPhases (context) {
   return new Promise((resolve) => {
     axios.get(`http://127.0.0.1:8081/api/phase/get`).then(response => {
-      context.commit('setPhases', response.data.data)
-      resolve(response.data)
+      const { data, status } = response.data
+      if (status) {
+        context.commit('setPhases', data)
+        resolve(data)
+      } else {
+        context.commit('setPhases', [])
+        resolve([])
+      }
     })
   })
 }

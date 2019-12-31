@@ -1,9 +1,8 @@
 const db = require('./db.js')
-const Result = require('./Result.js')
 
 exports.getPhases = (request, response) => {
   db.many(`
-    SELECT * FROM phase;
+    SELECT phase, description FROM phase;
   `).then(data => {
     response.json({ data, status: true, message: 'Phases retrieved!' })
   }).catch(error => {

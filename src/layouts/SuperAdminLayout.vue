@@ -12,6 +12,7 @@
         />
 
         <q-toolbar-title>
+          {{pageTitle}}
         </q-toolbar-title>
 
         <q-btn flat label="Logout" style="border-radius: 0px;" />
@@ -28,16 +29,7 @@
     >
       <q-list>
         <q-item-label header></q-item-label>
-        <q-item clickable @click="navigate('user')">
-          <q-item-section avatar>
-            <q-icon name="assignment" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Reporting</q-item-label>
-            <q-item-label caption>Generate reports.</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable @click="navigate('')">
+        <q-item clickable @click="navigate('', 'Airman')">
           <q-item-section avatar>
             <q-icon name="person_outline" />
           </q-item-section>
@@ -46,7 +38,7 @@
             <q-item-label caption>List of airmen</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('squadron')">
+        <q-item clickable @click="navigate('squadron', 'Squadrons')">
           <q-item-section avatar>
             <q-icon name="people_outline" />
           </q-item-section>
@@ -55,7 +47,7 @@
             <q-item-label caption>List of squadrons</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('room')">
+        <q-item clickable @click="navigate('room', 'Rooms')">
           <q-item-section avatar>
             <q-icon name="meeting_room" />
           </q-item-section>
@@ -64,7 +56,7 @@
             <q-item-label caption>List of rooms</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('phase')">
+        <q-item clickable @click="navigate('phase', 'Phases')">
           <q-item-section avatar>
             <q-icon name="next_week" />
           </q-item-section>
@@ -73,7 +65,7 @@
             <q-item-label caption>List of phases</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('status')">
+        <q-item clickable @click="navigate('status', 'Statuses')">
           <q-item-section avatar>
             <q-icon name="notification_important" />
           </q-item-section>
@@ -82,7 +74,7 @@
             <q-item-label caption>List of statuses</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('activity')">
+        <q-item clickable @click="navigate('activity', 'Activity')">
           <q-item-section avatar>
             <q-icon name="calendar_today" />
           </q-item-section>
@@ -91,7 +83,16 @@
             <q-item-label caption>Logs</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('user')">
+        <q-item clickable @click="navigate('reporting', 'Reporting')">
+          <q-item-section avatar>
+            <q-icon name="assignment" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Reporting</q-item-label>
+            <q-item-label caption>Generate reports.</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable @click="navigate('user', 'Users')">
           <q-item-section avatar>
             <q-icon name="build" />
           </q-item-section>
@@ -115,11 +116,13 @@ export default {
   data () {
     return {
       mode: '/super-admin',
-      leftDrawerOpen: false
+      leftDrawerOpen: false,
+      pageTitle: 'Airman'
     }
   },
   methods: {
-    navigate (path) {
+    navigate (path, title) {
+      this.pageTitle = title
       this.$router.replace(`${this.mode}/${path}`)
     }
   }

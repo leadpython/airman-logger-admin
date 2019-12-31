@@ -1,7 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import airman from './airman/index.js'
 import phase from './phase/index.js'
+import room from './room/index.js'
+import squadron from './squadron/index.js'
+import status from './status/index.js'
+import report from './report/index.js'
 
 Vue.use(Vuex)
 
@@ -17,7 +22,12 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      phase
+      airman,
+      phase,
+      room,
+      squadron,
+      status,
+      report
     },
 
     // enable strict mode (adds overhead!)

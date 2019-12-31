@@ -22,7 +22,7 @@
       :virtual-scroll-sticky-start="48"
       row-key="name"
       title="Airman Roster"
-      :data="data"
+      :data="airmen"
       :columns="columns"
       @row-click="viewAirman"
     />
@@ -47,27 +47,32 @@
             <q-input v-model="lastName" square dense outlined />
           </div>
           <div class="add-airman-row">
+            <label>Middle Name</label>
+            <q-input v-model="middleName" square dense outlined />
+          </div>
+          <div class="add-airman-row">
             <label>Room #</label>
-            <q-select square outlined v-model="room" dense :options="options.room" />
+            <q-select square outlined v-model="room" dense :options="roomOptions" />
           </div>
           <div class="add-airman-row">
             <label>Phase</label>
-            <q-select square outlined v-model="phase" dense :options="options.phase" />
+            <q-select square outlined v-model="phase" dense :options="phaseOptions" />
           </div>
           <div class="add-airman-row">
             <label>Squadron</label>
-            <q-select square outlined v-model="squadron" dense :options="options.squadron" />
+            <q-select square outlined v-model="squadron" dense :options="squadronOptions" />
           </div>
           <div class="add-airman-row">
             <label>Status</label>
-            <q-select square outlined v-model="status" dense :options="options.status" />
+            <q-select square outlined v-model="status" dense :options="statusOptions" />
           </div>
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-primary">
           <q-btn flat label="Close" v-close-popup />
-          <q-btn flat label="Add" @click="addAirman" v-close-popup />
+          <q-btn flat label="Add" @click="addAirman" :disable="cannotAdd" v-close-popup />
         </q-card-actions>
+
       </q-card>
     </q-dialog>
 
@@ -84,27 +89,30 @@
           </div>
           <div class="add-airman-row">
             <label>First Name</label>
-            <q-input v-model="selectedAirman.firstName" square dense outlined :disable="!isEditMode" />
+            <q-input v-model="selectedAirman.first_name" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-airman-row">
             <label>Last Name</label>
-            <q-input v-model="selectedAirman.lastName" square dense outlined :disable="!isEditMode" />
+            <q-input v-model="selectedAirman.last_name" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-airman-row">
             <label>Room #</label>
-            <q-select square outlined v-model="selectedAirman.room" dense :options="options.room" :disable="!isEditMode" />
+            <q-select square outlined v-model="selectedAirman.room_number" dense :options="roomOptions" :disable="!isEditMode" />
           </div>
           <div class="add-airman-row">
             <label>Phase</label>
-            <q-select square outlined v-model="selectedAirman.phase" dense :options="options.phase" :disable="!isEditMode" />
+            <q-select square outlined v-model="selectedAirman.phase" dense :options="phaseOptions" :disable="!isEditMode" />
           </div>
           <div class="add-airman-row">
             <label>Squadron</label>
-            <q-select square outlined v-model="selectedAirman.squadron" dense :options="options.squadron" :disable="!isEditMode" />
+            <q-select square outlined v-model="selectedAirman.squadron" dense :options="squadronOptions" :disable="!isEditMode" />
           </div>
           <div class="add-airman-row">
             <label>Status</label>
-            <q-select square outlined v-model="selectedAirman.status" dense :options="options.status" :disable="!isEditMode" />
+            <q-select square outlined v-model="selectedAirman.status" dense :options="statusOptions" :disable="!isEditMode" />
+          </div>
+          <div class="add-airman-row">
+            <label style="color: red;">{{errorMessage}}</label>
           </div>
         </q-card-section>
 
@@ -130,6 +138,7 @@ export default {
       cacid: '',
       firstName: '',
       lastName: '',
+      middleName: '',
       room: '',
       phase: '',
       squadron: '',
@@ -140,6 +149,8 @@ export default {
         squadron: [],
         status: []
       },
+      errorMessage: '',
+      isAddingAirman: false,
       showAirmanProfile: false,
       showAddAirman: false,
       selectedAirman: {},
@@ -149,350 +160,97 @@ export default {
       },
       columns: [
         { name: 'cacid', label: 'CACID', align: 'left', field: 'cacid' },
-        { name: 'lastName', label: 'Last Name', align: 'left', field: 'lastName' },
-        { name: 'firstName', label: 'First Name', align: 'left', field: 'firstName' },
-        { name: 'room', label: 'Room', align: 'left', field: 'room' },
+        { name: 'last_name', label: 'Last Name', align: 'left', field: 'last_name' },
+        { name: 'first_name', label: 'First Name', align: 'left', field: 'first_name' },
+        { name: 'room_number', label: 'Room', align: 'left', field: 'room_number' },
         { name: 'phase', label: 'Phase', align: 'left', field: 'phase' },
         { name: 'squadron', label: 'Squadron', align: 'left', field: 'squadron' },
         { name: 'status', label: 'Status', align: 'left', field: 'status' }
-      ],
-      data: [
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        },
-        {
-          cacid: 'test cacid',
-          lastName: 'Danks',
-          firstName: 'John',
-          room: 'F1234',
-          phase: '1',
-          squadron: '382',
-          status: '4392'
-        }
       ]
     }
   },
   computed: {
+    airmen () {
+      return this.$store.getters['airman/airmen'] || []
+    },
     roomOptions () {
-      return this.options.room
+      const roomOptions = []
+      for (let i = 0; i < this.$store.getters['room/rooms'].length; i++) {
+        roomOptions.push(this.$store.getters['room/rooms'][i].room_number)
+      }
+      return roomOptions
     },
     phaseOptions () {
-      return this.options.phase
+      const phaseOptions = []
+      for (let i = 0; i < this.$store.getters['phase/phases'].length; i++) {
+        phaseOptions.push(this.$store.getters['phase/phases'][i].phase)
+      }
+      return phaseOptions
     },
     squadronOptions () {
-      return this.options.squadron
+      const squadronOptions = []
+      for (let i = 0; i < this.$store.getters['squadron/squadrons'].length; i++) {
+        squadronOptions.push(this.$store.getters['squadron/squadrons'][i].squadron)
+      }
+      return squadronOptions
     },
     statusOptions () {
-      return this.options.status
+      const statusOptions = []
+      for (let i = 0; i < this.$store.getters['status/statuses'].length; i++) {
+        statusOptions.push(this.$store.getters['status/statuses'][i].status)
+      }
+      return statusOptions
+    },
+    cannotAdd () {
+      return this.cacid.length === 0 || this.firstName.length === 0 || this.lastName.length === 0 || this.middleName.length === 0 || this.room.length === 0 || this.phase.length === 0 || this.squadron.length === 0 || this.status.length === 0
     }
   },
   methods: {
     addAirman () {
-      // add airman to airman_master
+      const self = this
+      self.isAddingAirman = true
+      self.$store.dispatch('airman/addAirman', {
+        cacid: self.cacid,
+        first_name: self.firstName,
+        last_name: self.lastName,
+        middle_name: self.middleName,
+        room_number: self.room,
+        phase: self.phase,
+        squadron: self.squadron,
+        status: self.status
+      }).then(data => {
+        self.isAddingAirman = false
+        self.cacid = ''
+        self.firstName = ''
+        self.lastName = ''
+        self.middleName = ''
+        self.room = ''
+        self.phase = ''
+        self.squadron = ''
+        self.status = ''
+      })
     },
     editAirman () {
-      // edit airman
+      this.isEditMode = false
+      this.$store.dispatch('airman/updateAirman', this.selectedAirman)
     },
     viewAirman (event, row) {
       this.showAirmanProfile = true
-      this.selectedAirman = row
+      this.selectedAirman = JSON.parse(JSON.stringify(row))
+      this.errorMessage = ''
     },
     removeAirman () {
-      // remove airman
+      const self = this
+      self.isEditMode = false
+      self.$store.dispatch('airman/removeAirman', self.selectedAirman).then(data => {
+        const { status } = data
+        if (status) {
+          self.showAirmanProfile = false
+        } else {
+          self.showAirmanProfile = true
+          self.errorMessage = 'Cannot delete airman.'
+        }
+      })
     }
   }
 }

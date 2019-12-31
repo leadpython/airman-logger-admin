@@ -15,7 +15,7 @@
       :virtual-scroll-sticky-start="48"
       row-key="name"
       title="Status"
-      :data="data"
+      :data="statuses"
       :columns="columns"
       @row-click="viewStatus"
     />
@@ -28,32 +28,12 @@
 
         <q-card-section>
           <div class="add-status-row">
-            <label>CACID</label>
-            <q-input v-model="cacid" square dense outlined />
+            <label>Status Number</label>
+            <q-input v-model="status" maxlength=5 square dense outlined />
           </div>
           <div class="add-status-row">
-            <label>First Name</label>
-            <q-input v-model="firstName" square dense outlined />
-          </div>
-          <div class="add-status-row">
-            <label>Last Name</label>
-            <q-input v-model="lastName" square dense outlined />
-          </div>
-          <div class="add-status-row">
-            <label>Room #</label>
-            <q-select square outlined v-model="room" dense :options="options.room" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="status" dense :options="options.status" />
-          </div>
-          <div class="add-status-row">
-            <label>Squadron</label>
-            <q-select square outlined v-model="squadron" dense :options="options.squadron" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="status" dense :options="options.status" />
+            <label>Description</label>
+            <q-input v-model="description" square dense outlined />
           </div>
         </q-card-section>
 
@@ -67,37 +47,28 @@
     <q-dialog v-model="showStatusProfile" persistent square transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-black" style="width: 400px">
         <q-card-section>
-          <div class="text-h6">{{`${selectedStatus.firstName} ${selectedStatus.lastName}`}}</div>
+          <div class="text-h6">Status {{`${selectedStatus.status}`}}</div>
         </q-card-section>
 
         <q-card-section>
           <div class="add-status-row">
-            <label>CACID</label>
-            <q-input v-model="selectedStatus.cacid" square dense outlined :disable="!isEditMode" />
+            <label>Status Number</label>
+            <q-input v-model="selectedStatus.status" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-status-row">
-            <label>First Name</label>
-            <q-input v-model="selectedStatus.firstName" square dense outlined :disable="!isEditMode" />
+            <label>Description</label>
+            <q-input v-model="selectedStatus.description" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-status-row">
-            <label>Last Name</label>
-            <q-input v-model="selectedStatus.lastName" square dense outlined :disable="!isEditMode" />
+            <label>Floor</label>
+            <q-input v-model="selectedStatus.floor" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-status-row">
-            <label>Room #</label>
-            <q-select square outlined v-model="selectedStatus.room" dense :options="options.room" :disable="!isEditMode" />
+            <label>Wing</label>
+            <q-input v-model="selectedStatus.wing" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="selectedStatus.status" dense :options="options.status" :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Squadron</label>
-            <q-select square outlined v-model="selectedStatus.squadron" dense :options="options.squadron" :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="selectedStatus.status" dense :options="options.status" :disable="!isEditMode" />
+            <label style="color: red;">{{errorMessage}}</label>
           </div>
         </q-card-section>
 
@@ -119,74 +90,63 @@ export default {
   name: 'PageStatus',
   data () {
     return {
-      searchTerm: '',
-      cacid: '',
-      firstName: '',
-      lastName: '',
-      room: '',
-      phase: '',
-      squadron: '',
       status: '',
-      options: {
-        room: [],
-        phase: [],
-        squadron: [],
-        status: []
-      },
+      description: '',
       showStatusProfile: false,
       showAddStatus: false,
       selectedStatus: {},
+      errorMessage: '',
       isEditMode: false,
       pagination: {
         rowsPerPage: 0
       },
       columns: [
-        { name: 'status', label: 'Status', align: 'left', field: 'status' },
-        { name: 'description', label: 'Description', align: 'left', field: 'description' },
-        { name: 'date_time_created', label: 'Created On', align: 'left', field: 'date_time_created' },
-        { name: 'created_by', label: 'Created By', align: 'left', field: 'created_by' },
-        { name: 'date_time_updated', label: 'Updated On', align: 'left', field: 'date_time_updated' },
-        { name: 'updated_by', label: 'Updated By', align: 'left', field: 'updated_by' }
-      ],
-      data: [
-        {
-          status: 'test status',
-          description: 'status for testing',
-          date_time_created: '12/27/2019',
-          created_by: 'John Danks',
-          date_time_updated: '12/27/2019',
-          updated_by: 'John Danks'
-        }
+        { name: 'status', label: 'Status Number', align: 'left', field: 'status' },
+        { name: 'description', label: 'Description', align: 'left', field: 'description' }
       ]
     }
   },
   computed: {
-    roomOptions () {
-      return this.options.room
-    },
-    phaseOptions () {
-      return this.options.status
-    },
-    squadronOptions () {
-      return this.options.squadron
-    },
-    statusOptions () {
-      return this.options.status
+    statuses () {
+      return this.$store.getters['status/statuses']
     }
   },
   methods: {
     addStatus () {
-      // add status to status_master
+      const self = this
+      self.isAddingStatus = true
+      self.$store.dispatch('status/addStatus', {
+        status: self.status,
+        description: self.description,
+        floor: self.floor,
+        wing: self.wing
+      }).then(data => {
+        self.isAddingStatus = false
+        self.status = ''
+        self.description = ''
+      })
     },
     editStatus () {
-      // edit status
+      this.isEditMode = false
+      this.$store.dispatch('status/updateStatus', this.selectedStatus)
     },
     viewStatus (event, row) {
       this.showStatusProfile = true
-      this.selectedStatus = row
+      this.selectedStatus = JSON.parse(JSON.stringify(row))
+      this.errorMessage = ''
     },
     removeStatus () {
-      // remove status
+      const self = this
+      self.isEditMode = false
+      self.$store.dispatch('status/removePhase', self.selectedStatus).then(data => {
+        const { status } = data
+        if (status) {
+          self.showStatusProfile = false
+        } else {
+          self.showStatusProfile = true
+          self.errorMessage = 'Cannot delete status.'
+        }
+      })
     }
   }
 }
@@ -200,7 +160,6 @@ export default {
   label {
     font-size: 12px;
     color: rgb(100,100,100);
-
   }
 }
 </style>

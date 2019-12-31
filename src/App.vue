@@ -8,7 +8,11 @@
 export default {
   name: 'App',
   created () {
+    this.$store.dispatch('airman/getAirmen')
     this.$store.dispatch('phase/getPhases')
+    this.$store.dispatch('room/getRooms')
+    this.$store.dispatch('squadron/getSquadrons')
+    this.$store.dispatch('status/getStatuses')
   }
 }
 </script>

@@ -15,7 +15,7 @@
       :virtual-scroll-sticky-start="48"
       row-key="name"
       title="Room"
-      :data="data"
+      :data="rooms"
       :columns="columns"
       @row-click="viewRoom"
     />
@@ -75,6 +75,9 @@
             <label>Wing</label>
             <q-input v-model="selectedRoom.wing" square dense outlined :disable="!isEditMode" />
           </div>
+          <div class="add-room-row">
+            <label style="color: red;">{{errorMessage}}</label>
+          </div>
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-primary">
@@ -95,7 +98,6 @@ export default {
   name: 'PageRoom',
   data () {
     return {
-      searchTerm: '',
       room: '',
       description: '',
       floor: '',
@@ -103,57 +105,60 @@ export default {
       showRoomProfile: false,
       showAddRoom: false,
       selectedRoom: {},
+      errorMessage: '',
       isEditMode: false,
       pagination: {
         rowsPerPage: 0
       },
       columns: [
-        { name: 'room', label: 'Room Number', align: 'left', field: 'room' },
+        { name: 'room_number', label: 'Room Number', align: 'left', field: 'room_number' },
         { name: 'description', label: 'Description', align: 'left', field: 'description' },
-        { name: 'floor', label: 'Floor Number', align: 'left', field: 'floor' },
-        { name: 'wing', label: 'Wing Number', align: 'left', field: 'wing' },
-        { name: 'date_time_created', label: 'Created On', align: 'left', field: 'date_time_created' },
-        { name: 'created_by', label: 'Created By', align: 'left', field: 'created_by' }
-      ],
-      data: [
-        {
-          room: 'test room',
-          description: 'room for testing',
-          floor: 'floor for testing',
-          wing: 'wing for testing',
-          date_time_created: '12/27/2019',
-          created_by: 'John Danks'
-        }
+        { name: 'floor_number', label: 'Floor Number', align: 'left', field: 'floor_number' },
+        { name: 'wing', label: 'Wing Number', align: 'left', field: 'wing' }
       ]
     }
   },
   computed: {
-    phaseOptions () {
-      return this.options.room
-    },
-    roomOptions () {
-      return this.options.room
-    },
-    squadronOptions () {
-      return this.options.squadron
-    },
-    statusOptions () {
-      return this.options.status
+    rooms () {
+      return this.$store.getters['room/rooms']
     }
   },
   methods: {
     addRoom () {
-      // add room to room_master
+      const self = this
+      self.isAddingRoom = true
+      self.$store.dispatch('room/addRoom', {
+        room: self.room,
+        description: self.description,
+        floor: self.floor,
+        wing: self.wing
+      }).then(data => {
+        self.isAddingRoom = false
+        self.room = ''
+        self.description = ''
+      })
     },
     editRoom () {
-      // edit room
+      this.isEditMode = false
+      this.$store.dispatch('room/updateRoom', this.selectedRoom)
     },
     viewRoom (event, row) {
       this.showRoomProfile = true
-      this.selectedRoom = row
+      this.selectedRoom = JSON.parse(JSON.stringify(row))
+      this.errorMessage = ''
     },
     removeRoom () {
-      // remove room
+      const self = this
+      self.isEditMode = false
+      self.$store.dispatch('room/removePhase', self.selectedRoom).then(data => {
+        const { status } = data
+        if (status) {
+          self.showRoomProfile = false
+        } else {
+          self.showRoomProfile = true
+          self.errorMessage = 'Cannot delete room.'
+        }
+      })
     }
   }
 }
@@ -167,7 +172,6 @@ export default {
   label {
     font-size: 12px;
     color: rgb(100,100,100);
-
   }
 }
 </style>

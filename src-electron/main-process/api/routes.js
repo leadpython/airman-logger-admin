@@ -7,6 +7,7 @@ const squadron = require('./models/squadron.js')
 const status = require('./models/status.js')
 const scan = require('./models/scan.js')
 const report = require('./models/report.js')
+const admin = require('./models/admin.js')
 
 // AIRMAN
 router.get('/airman/get', (request, response) => {
@@ -92,6 +93,20 @@ router.get('/report/signed-in', (request, response) => {
 })
 router.get('/report/signed-out', (request, response) => {
   report.reportSignedOut(request, response)
+})
+
+// ADMIN
+router.get('/admin/get', (request, response) => {
+  admin.getAdmins(request, response)
+})
+router.post('/admin/register', (request, response) => {
+  admin.registerAdmin(request, response)
+})
+router.post('/admin/authenticate', (request, response) => {
+  admin.authenticateAdmin(request, response)
+})
+router.post('/admin/remove', (request, response) => {
+  admin.removeAdmin(request, response)
 })
 
 module.exports = router;

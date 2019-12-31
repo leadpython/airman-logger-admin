@@ -15,7 +15,7 @@
           {{pageTitle}}
         </q-toolbar-title>
 
-        <q-btn flat label="Logout" style="border-radius: 0px;" />
+        <q-btn flat label="Logout" @click="logout" style="border-radius: 0px;" />
 
         <div></div>
       </q-toolbar>
@@ -92,13 +92,13 @@
             <q-item-label caption>Generate reports.</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('user', 'Users')">
+        <q-item clickable @click="navigate('user', 'Admins')">
           <q-item-section avatar>
             <q-icon name="build" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Users</q-item-label>
-            <q-item-label caption>List of users</q-item-label>
+            <q-item-label>Admins</q-item-label>
+            <q-item-label caption>List of admins</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -124,6 +124,9 @@ export default {
     navigate (path, title) {
       this.pageTitle = title
       this.$router.replace(`${this.mode}/${path}`)
+    },
+    logout () {
+      this.$router.replace('/')
     }
   }
 }

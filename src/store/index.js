@@ -7,6 +7,7 @@ import room from './room/index.js'
 import squadron from './squadron/index.js'
 import status from './status/index.js'
 import report from './report/index.js'
+import admin from './admin/index.js'
 
 Vue.use(Vuex)
 
@@ -27,7 +28,8 @@ export default function (/* { ssrContext } */) {
       room,
       squadron,
       status,
-      report
+      report,
+      admin
     },
 
     // enable strict mode (adds overhead!)

@@ -1,19 +1,45 @@
 <template>
-  <div class="login-page flex flex-center">
+  <div class="login-page flex flex-center column">
+    <q-icon name="warning" class="text-red" style="font-size: 250px;" v-if="isFail" />
     <q-input
       v-model="cacid"
       label="CACID"
       type="password"
+      debounce="500"
       square
       outlined
       @input="scan"
-      v-if="!isLoading"
+      v-if="!isLoading && !noSuperAdmin"
       style="padding: 10px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 0px;"
     />
-    <q-icon name="warning" class="text-red" style="font-size: 250px;" v-if="isFail" />
-    <div id="splash" v-if="isLoading">
-      <img class="blink" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/US_Air_Force_Logo_Solid_Colour.svg/1280px-US_Air_Force_Logo_Solid_Colour.svg.png" />
-    </div>
+    <label style="font-size: 25px; font-weight: 300;" v-if="!isLoading && noSuperAdmin">REGISTER SUPER ADMIN</label>
+    <q-input
+      v-model="registerCacid"
+      label="CACID"
+      type="password"
+      square
+      outlined
+      v-if="!isLoading && noSuperAdmin"
+      style="padding: 10px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 0px;"
+    />
+    <q-input
+      v-model="registerAdminName"
+      label="Admin Name"
+      type="text"
+      square
+      outlined
+      v-if="!isLoading && noSuperAdmin"
+      style="padding: 10px; font-size: 20px; width: 100%; max-width: 400px; border-radius: 0px;"
+    />
+    <q-btn v-if="!isLoading && noSuperAdmin" @click="registerAdmin" color="primary" outlined  label="Register Admin" style="border-radius: 0px;" />
+
+    <q-inner-loading :showing="isLoading">
+      <q-spinner
+        color="primary"
+        size="100px"
+        :thickness="10"
+      />
+    </q-inner-loading>
   </div>
 </template>
 
@@ -25,26 +51,55 @@ export default {
       isLoading: false,
       isSuccess: false,
       isFail: false,
-      cacid: ''
+      cacid: '',
+      registerCacid: '',
+      registerAdminName: '',
+      noSuperAdmin: false
     }
+  },
+  mounted () {
+    const self = this
+    self.$store.dispatch('admin/getAdmins').then(admins => {
+      if (admins.length <= 0) {
+        self.noSuperAdmin = true
+      }
+    })
   },
   methods: {
     scan () {
       const self = this
-      clearTimeout(window.loginTimeout)
-      window.loginTimeout = setTimeout(() => {
-        self.isLoading = true
-        self.isSuccess = false
-        setTimeout(() => {
-          self.isLoading = false
+      self.isLoading = true
+      self.$store.dispatch('admin/authenticateAdmin', self.cacid).then(result => {
+        const { data: admin, status } = result
+        self.isLoading = false
+        console.log(self.$store.getters['admin/currentAdmin'])
+        if (status) {
           self.isSuccess = true
-          self.cacid = ''
-          setTimeout(() => {
-            self.isSuccess = false
+          if (admin.permission_level === 2) {
             self.$router.replace('/super-admin')
-          }, 200)
-        }, 2000)
-      }, 500)
+          } else if (admin.permission_level === 1) {
+            self.$router.replace('/admin')
+          } else {
+            self.$router.replace('/user')
+          }
+        } else {
+          self.isFail = true
+        }
+      })
+    },
+    registerAdmin () {
+      const self = this
+      self.isLoading = true
+      self.$store.dispatch('admin/registerAdmin', {
+        cacid: self.registerCacid,
+        admin_name: self.registerAdminName,
+        permission_level: 2
+      }).then(data => {
+        self.isLoading = false
+        self.noSuperAdmin = false
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

@@ -2,7 +2,7 @@
   <q-page class="page-container flex column">
     <div class="bg-primary text-black" style="padding: 10px 0 5px 0;">
       <q-toolbar>
-        <q-btn @click="showAddStatus = true" color="white" flat icon="person_add" label="Add Status" style="border-radius: 0px;" />
+        <q-btn @click="showAddAdmin = true" color="white" flat icon="person_add" label="Add Admin" style="border-radius: 0px;" />
       </q-toolbar>
     </div>
 
@@ -14,99 +14,67 @@
       :rows-per-page-options="[0]"
       :virtual-scroll-sticky-start="48"
       row-key="name"
-      title="Status"
-      :data="data"
+      title="Admin"
+      :data="admins"
       :columns="columns"
-      @row-click="viewStatus"
+      @row-click="viewAdmin"
     />
 
-    <q-dialog v-model="showAddStatus" persistent square transition-show="scale" transition-hide="scale">
+    <q-dialog v-model="showAddAdmin" persistent square transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-black" style="width: 400px">
         <q-card-section>
-          <div class="text-h6">Add Status</div>
+          <div class="text-h6">Add Admin</div>
         </q-card-section>
 
         <q-card-section>
-          <div class="add-status-row">
+          <div class="add-admin-row">
             <label>CACID</label>
-            <q-input v-model="cacid" square dense outlined />
+            <q-input v-model="cacid" maxlength=5 square dense outlined />
           </div>
-          <div class="add-status-row">
-            <label>First Name</label>
-            <q-input v-model="firstName" square dense outlined />
+          <div class="add-admin-row">
+            <label>Admin Name</label>
+            <q-input v-model="admin_name" square dense outlined />
           </div>
-          <div class="add-status-row">
-            <label>Last Name</label>
-            <q-input v-model="lastName" square dense outlined />
-          </div>
-          <div class="add-status-row">
-            <label>Room #</label>
-            <q-select square outlined v-model="room" dense :options="options.room" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="status" dense :options="options.status" />
-          </div>
-          <div class="add-status-row">
-            <label>Squadron</label>
-            <q-select square outlined v-model="squadron" dense :options="options.squadron" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="status" dense :options="options.status" />
+          <div class="add-admin-row">
+            <label>Permission Level</label>
+            <select v-model="permission_level">
+              <option :value="0">Regular User</option>
+              <option :value="1">Admin</option>
+            </select>
           </div>
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-primary">
           <q-btn flat label="Close" v-close-popup />
-          <q-btn flat label="Add" @click="addStatus" v-close-popup />
+          <q-btn flat label="Add" @click="registerAdmin" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="showStatusProfile" persistent square transition-show="scale" transition-hide="scale">
+    <q-dialog v-model="showAdminProfile" persistent square transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-black" style="width: 400px">
         <q-card-section>
-          <div class="text-h6">{{`${selectedStatus.firstName} ${selectedStatus.lastName}`}}</div>
+          <div class="text-h6">Admin</div>
         </q-card-section>
 
         <q-card-section>
-          <div class="add-status-row">
-            <label>CACID</label>
-            <q-input v-model="selectedStatus.cacid" square dense outlined :disable="!isEditMode" />
+          <div class="add-admin-row">
+            <label>Admin Name</label>
+            <q-input v-model="selectedAdmin.admin_name" square dense outlined :disable="true" />
           </div>
-          <div class="add-status-row">
-            <label>First Name</label>
-            <q-input v-model="selectedStatus.firstName" square dense outlined :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Last Name</label>
-            <q-input v-model="selectedStatus.lastName" square dense outlined :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Room #</label>
-            <q-select square outlined v-model="selectedStatus.room" dense :options="options.room" :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="selectedStatus.status" dense :options="options.status" :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Squadron</label>
-            <q-select square outlined v-model="selectedStatus.squadron" dense :options="options.squadron" :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Status</label>
-            <q-select square outlined v-model="selectedStatus.status" dense :options="options.status" :disable="!isEditMode" />
+          <div class="add-admin-row">
+            <label>Permission Level</label>
+            <select style="padding: 10px; color: black; height: 35px;" v-model="selectedAdmin.permission_level" disabled>
+              <option :value="0">Regular User</option>
+              <option :value="1">Admin</option>
+              <option :value="2">Super Admin</option>
+            </select>
           </div>
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-primary">
-          <q-btn color="negative" flat label="Remove Status" @click="removeStatus" v-if="!isEditMode" />
-          <q-btn flat label="Close" v-close-popup v-if="!isEditMode" />
-          <q-btn flat label="Edit" @click="isEditMode = true" v-if="!isEditMode" />
-          <q-btn flat label="Cancel" @click="isEditMode = false" v-if="isEditMode" />
-          <q-btn flat label="Finalize" @click="editStatus" v-if="isEditMode" />
+          <q-btn color="negative" flat label="Remove Admin" v-close-popup @click="removeAdmin" v-if="selectedAdmin.permission_level < 2" />
+          <q-btn flat label="Close" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -116,91 +84,72 @@
 
 <script>
 export default {
-  name: 'PageStatus',
+  name: 'PageAdmin',
   data () {
     return {
-      searchTerm: '',
       cacid: '',
-      firstName: '',
-      lastName: '',
-      room: '',
-      phase: '',
-      squadron: '',
-      status: '',
-      options: {
-        room: [],
-        phase: [],
-        squadron: [],
-        status: []
-      },
-      showStatusProfile: false,
-      showAddStatus: false,
-      selectedStatus: {},
+      admin_name: '',
+      permission_level: 0,
+      showAddAdmin: false,
+      showAdminProfile: false,
       isEditMode: false,
+      selectedAdmin: {},
       pagination: {
         rowsPerPage: 0
       },
       columns: [
-        { name: 'status', label: 'Status', align: 'left', field: 'status' },
-        { name: 'description', label: 'Description', align: 'left', field: 'description' },
-        { name: 'date_time_created', label: 'Created On', align: 'left', field: 'date_time_created' },
-        { name: 'created_by', label: 'Created By', align: 'left', field: 'created_by' },
-        { name: 'date_time_updated', label: 'Updated On', align: 'left', field: 'date_time_updated' },
-        { name: 'updated_by', label: 'Updated By', align: 'left', field: 'updated_by' }
-      ],
-      data: [
-        {
-          status: 'test status',
-          description: 'status for testing',
-          date_time_created: '12/27/2019',
-          created_by: 'John Danks',
-          date_time_updated: '12/27/2019',
-          updated_by: 'John Danks'
-        }
+        { name: 'admin_name', label: 'Admin', align: 'left', field: 'admin_name' },
+        { name: 'permission_level', label: 'Permission Level', align: 'left', field: 'permission_level' }
       ]
     }
   },
   computed: {
-    roomOptions () {
-      return this.options.room
-    },
-    phaseOptions () {
-      return this.options.status
-    },
-    squadronOptions () {
-      return this.options.squadron
-    },
-    statusOptions () {
-      return this.options.status
+    admins () {
+      return this.$store.getters['admin/admins']
     }
   },
+  mounted () {
+    this.$store.dispatch('admin/getAdmins')
+  },
   methods: {
-    addStatus () {
-      // add status to status_master
+    removeAdmin () {
+      const self = this
+      self.$store.dispatch('admin/removeAdmin', { admin_name: self.selectedAdmin.admin_name })
     },
-    editStatus () {
-      // edit status
+    viewAdmin (evt, row) {
+      const self = this
+      self.selectedAdmin = row
+      self.showAdminProfile = true
     },
-    viewStatus (event, row) {
-      this.showStatusProfile = true
-      this.selectedStatus = row
-    },
-    removeStatus () {
-      // remove status
+    registerAdmin () {
+      const self = this
+      self.isLoading = true
+      self.$store.dispatch('admin/registerAdmin', {
+        cacid: self.cacid,
+        admin_name: self.admin_name,
+        permission_level: self.permission_level
+      }).then(data => {
+        self.isLoading = false
+        self.noSuperAdmin = false
+        self.cacid = ''
+        self.permission_level = 0
+        self.admin_name = ''
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.add-status-row {
+.add-admin-row {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
   label {
     font-size: 12px;
     color: rgb(100,100,100);
-
   }
 }
 </style>

@@ -2,7 +2,7 @@ const db = require('./db.js')
 
 exports.getAdmins = (request, response) => {
   db.many(`
-    SELECT admin_name, permission_level FROM admin;
+    SELECT admin_name, permission_level FROM admins;
   `).then(data => {
     response.json({ data, status: true, message: 'Admins retrieved!' })
   }).catch(error => {
@@ -13,7 +13,7 @@ exports.getAdmins = (request, response) => {
 exports.registerAdmin = (request, response) => {
   const { cacid, admin_name, permission_level } = request.body
   db.many(`
-    INSERT INTO admin (
+    INSERT INTO admins (
       admin_name,
       cacid,
       permission_level
@@ -32,7 +32,7 @@ exports.registerAdmin = (request, response) => {
 exports.authenticateAdmin = (request, response) => {
   const { cacid } = request.body
   db.many(`
-    SELECT * FROM admin
+    SELECT * FROM admins
   `).then(data => {
     for (let i = 0; i < data.length; i++) {
       let admin = data[i]
@@ -53,7 +53,7 @@ exports.authenticateAdmin = (request, response) => {
 exports.removeAdmin = (request, response) => {
   const { admin_name } = request.body
   db.many(`
-    DELETE FROM admin WHERE admin_name='${admin_name}'
+    DELETE FROM admins WHERE admin_name='${admin_name}'
   `).then(data => {
     response.json({ data, status: true, message: 'Admin removed!' })
   }).catch(error => {

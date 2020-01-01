@@ -29,7 +29,7 @@
         <q-card-section>
           <div class="add-squadron-row">
             <label>Squadron Number</label>
-            <q-input v-model="squadron" maxlength=5 square dense outlined />
+            <q-input v-model="squadron" square dense outlined />
           </div>
           <div class="add-squadron-row">
             <label>Description</label>

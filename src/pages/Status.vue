@@ -29,7 +29,7 @@
         <q-card-section>
           <div class="add-status-row">
             <label>Status Number</label>
-            <q-input v-model="status" maxlength=5 square dense outlined />
+            <q-input v-model="status" maxlength=10 square dense outlined />
           </div>
           <div class="add-status-row">
             <label>Description</label>

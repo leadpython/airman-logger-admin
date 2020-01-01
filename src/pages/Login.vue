@@ -72,7 +72,6 @@ export default {
       self.$store.dispatch('admin/authenticateAdmin', self.cacid).then(result => {
         const { data: admin, status } = result
         self.isLoading = false
-        console.log(self.$store.getters['admin/currentAdmin'])
         if (status) {
           self.isSuccess = true
           if (admin.permission_level === 2) {
@@ -80,7 +79,7 @@ export default {
           } else if (admin.permission_level === 1) {
             self.$router.replace('/admin')
           } else {
-            self.$router.replace('/user')
+            self.$router.replace('/user/reporting')
           }
         } else {
           self.isFail = true

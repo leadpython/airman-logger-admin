@@ -29,7 +29,7 @@
         <q-card-section>
           <div class="add-room-row">
             <label>Room Number</label>
-            <q-input v-model="room" maxlength=5 square dense outlined />
+            <q-input v-model="room" maxlength=10 square dense outlined />
           </div>
           <div class="add-room-row">
             <label>Description</label>

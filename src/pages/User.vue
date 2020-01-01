@@ -29,7 +29,7 @@
         <q-card-section>
           <div class="add-admin-row">
             <label>CACID</label>
-            <q-input v-model="cacid" maxlength=5 square dense outlined />
+            <q-input v-model="cacid" square dense outlined />
           </div>
           <div class="add-admin-row">
             <label>Admin Name</label>

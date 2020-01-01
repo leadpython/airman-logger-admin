@@ -38,43 +38,43 @@
             <q-item-label caption>List of airmen</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('squadron', 'Squadrons')">
+        <q-item>
           <q-item-section avatar>
-            <q-icon name="people_outline" />
+            <q-icon style="color: rgba(200,200,200)" name="people_outline" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Squadron</q-item-label>
-            <q-item-label caption>List of squadrons</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)">Squadron</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)" caption>List of squadrons</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('room', 'Rooms')">
+        <q-item>
           <q-item-section avatar>
-            <q-icon name="meeting_room" />
+            <q-icon style="color: rgba(200,200,200)" name="meeting_room" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Room</q-item-label>
-            <q-item-label caption>List of rooms</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)">Room</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)" caption>List of rooms</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('phase', 'Phases')">
+        <q-item>
           <q-item-section avatar>
-            <q-icon name="next_week" />
+            <q-icon style="color: rgba(200,200,200)" name="next_week" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Phase</q-item-label>
-            <q-item-label caption>List of phases</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)">Phase</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)" caption>List of phases</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('status', 'Statuses')">
+        <q-item>
           <q-item-section avatar>
-            <q-icon name="notification_important" />
+            <q-icon style="color: rgba(200,200,200)" name="notification_important" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Status</q-item-label>
-            <q-item-label caption>List of statuses</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)">Status</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)" caption>List of statuses</q-item-label>
           </q-item-section>
         </q-item>
-        <!-- <q-item clickable @click="navigate('activity', 'Activity')">
+        <!-- <q-item clickable>
           <q-item-section avatar>
             <q-icon name="calendar_today" />
           </q-item-section>
@@ -92,13 +92,13 @@
             <q-item-label caption>Generate reports.</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable @click="navigate('user', 'Admins')">
+        <q-item>
           <q-item-section avatar>
-            <q-icon name="build" />
+            <q-icon style="color: rgba(200,200,200)" name="build" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Admins</q-item-label>
-            <q-item-label caption>List of admins</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)">Admins</q-item-label>
+            <q-item-label style="color: rgba(200,200,200)" caption>List of admins</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -112,10 +112,10 @@
 
 <script>
 export default {
-  name: 'SuperAdminLayout',
+  name: 'AdminLayout',
   data () {
     return {
-      mode: '/super-admin',
+      mode: '/admin',
       leftDrawerOpen: false,
       pageTitle: 'Airman'
     }

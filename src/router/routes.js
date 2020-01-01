@@ -20,6 +20,21 @@ const routes = [
       { path: 'user', component: () => import('pages/User.vue') },
       { path: 'reporting', component: () => import('pages/Reporting.vue') }
     ]
+  },
+  {
+    path: '/admin',
+    component: () => import('layouts/SuperAdminLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/Airman.vue') },
+      { path: 'reporting', component: () => import('pages/Reporting.vue') }
+    ]
+  },
+  {
+    path: '/user',
+    component: () => import('layouts/SuperAdminLayout.vue'),
+    children: [
+      { path: 'reporting', component: () => import('pages/Reporting.vue') }
+    ]
   }
 ]
 

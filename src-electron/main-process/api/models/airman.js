@@ -91,10 +91,11 @@ exports.replaceAirmanCACID = (request, response) => {
 exports.removeAirman = (request, response) => {
   const { airman_internal_id } = request.body
   db.none(`
-    DELETE FROM airman_master WHERE airman_internal_id='${airman_internal_id}'
+    DELETE FROM scan_transactions WHERE airman_internal_id=${airman_internal_id};
+    DELETE FROM airman_master WHERE airman_internal_id='${airman_internal_id}';
   `).then(data => {
-      response.json({ data, status: true, message: 'Phase removed!' })
+      response.json({ data, status: true, message: 'Airman removed!' })
   }).catch(error => {
-    response.json({ data: error, status: false, message: 'Phase failed to remove!' })
+    response.json({ data: error, status: false, message: 'Airman failed to remove!' })
   })
 }

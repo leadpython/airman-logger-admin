@@ -27,7 +27,8 @@ exports.addScanTransactions = (request, response) => {
         db.none(`
           UPDATE airman_master
           SET
-            is_in=${!is_in}
+            is_in=${!is_in},
+            last_activity=current_timestamp
           WHERE
             cacid='${cacid}'
         `).then(() => {

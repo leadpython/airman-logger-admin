@@ -4,3 +4,6 @@ export function setReportSignedIn (state, airmen) {
 export function setReportSignedOut (state, airmen) {
   state.reportSignedOut = airmen
 }
+export function setReportIdle (state, airmen) {
+  state.reportIdle = airmen
+}

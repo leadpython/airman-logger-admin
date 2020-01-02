@@ -29,7 +29,7 @@
         <q-card-section>
           <div class="add-admin-row">
             <label>CACID</label>
-            <q-input v-model="cacid" square dense outlined />
+            <q-input v-model="cacid" type="password" square dense outlined />
           </div>
           <div class="add-admin-row">
             <label>Admin Name</label>
@@ -37,7 +37,7 @@
           </div>
           <div class="add-admin-row">
             <label>Permission Level</label>
-            <select v-model="permission_level">
+            <select style="padding: 10px; color: black; height: 35px;" v-model="permission_level">
               <option :value="0">Regular User</option>
               <option :value="1">Admin</option>
             </select>

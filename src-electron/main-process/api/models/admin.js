@@ -36,7 +36,6 @@ exports.authenticateAdmin = (request, response) => {
   `).then(data => {
     for (let i = 0; i < data.length; i++) {
       let admin = data[i]
-      console.log(cacid, admin.cacid, cacid === admin.cacid)
       if (cacid === admin.cacid) {
         response.json({ data: {
           admin_name: admin.admin_name,

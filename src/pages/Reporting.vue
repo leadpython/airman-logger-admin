@@ -4,14 +4,22 @@
       <q-toolbar>
         <q-btn @click="reportSignedIn" color="white" flat label="Report Signed In" style="border-radius: 0px;" />
         <q-btn @click="reportSignedOut" color="white" flat label="Report Signed Out" style="border-radius: 0px;" />
+        <q-btn @click="reportIdle" color="white" flat label="Report Idle" style="border-radius: 0px;" />
       </q-toolbar>
     </div>
 
-    <div style="padding: 15px;">
-      <div style="padding: 5px; " v-for="(airman, index) in report" :key="index">
-        {{airman.last_name}}, {{airman.first_name}} {{airman.middle_name}} | Room: {{airman.room_number}} | Squadron: {{airman.squadron}}
-      </div>
-    </div>
+    <q-table
+      class="my-sticky-virtscroll-table"
+      virtual-scroll
+      table-style="max-height: 705px"
+      :pagination.sync="pagination"
+      :rows-per-page-options="[0]"
+      :virtual-scroll-sticky-start="48"
+      row-key="name"
+      title="Report"
+      :data="report"
+      :columns="columns"
+    />
 
     <q-inner-loading :showing="isReporting">
       <q-spinner
@@ -29,7 +37,19 @@ export default {
   data () {
     return {
       report: [],
-      isReporting: false
+      isReporting: false,
+      pagination: {
+        rowsPerPage: 0
+      },
+      columns: [
+        { name: 'last_name', label: 'Last Name', align: 'left', field: 'last_name', sortable: true },
+        { name: 'first_name', label: 'First Name', align: 'left', field: 'first_name', sortable: true },
+        { name: 'room_number', label: 'Room', align: 'left', field: 'room_number', sortable: true },
+        { name: 'phase', label: 'Phase', align: 'left', field: 'phase', sortable: true },
+        { name: 'squadron', label: 'Squadron', align: 'left', field: 'squadron', sortable: true },
+        { name: 'status', label: 'Status', align: 'left', field: 'status', sortable: true },
+        { name: 'last_activity', label: 'Last Activity', align: 'left', field: 'last_activity', sortable: true, format: val => `${(new Date(val)).toString()} ${console.log(new Date(val))}` }
+      ]
     }
   },
   computed: {
@@ -60,6 +80,17 @@ export default {
         this.$store.dispatch('report/reportSignedOut').then(data => {
           self.isReporting = false
           self.report = self.$store.getters['report/reportSignedOut']
+        })
+      }, 1000)
+    },
+    reportIdle () {
+      const self = this
+      self.isReporting = true
+      clearTimeout(window.reportIdleTimeout)
+      window.reportIdleTimeout = setTimeout(() => {
+        this.$store.dispatch('report/reportIdle').then(data => {
+          self.isReporting = false
+          self.report = self.$store.getters['report/reportIdle']
         })
       }, 1000)
     }

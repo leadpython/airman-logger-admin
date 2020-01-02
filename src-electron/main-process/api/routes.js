@@ -94,6 +94,10 @@ router.get('/report/signed-in', (request, response) => {
 router.get('/report/signed-out', (request, response) => {
   report.reportSignedOut(request, response)
 })
+router.get('/report/idle', (request, response) => {
+  report.reportIdle(request, response)
+})
+
 
 // ADMIN
 router.get('/admin/get', (request, response) => {

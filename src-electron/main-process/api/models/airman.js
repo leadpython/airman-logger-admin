@@ -13,6 +13,7 @@ exports.getAirmen = (request, response) => {
 
 exports.addAirman = (request, response) => {
   const { cacid, last_name, first_name, middle_name, room_number, phase, status, squadron, admin } = request.body
+  console.log(request.body)
   db.none(`
     INSERT INTO airman_master (
       cacid,
@@ -37,15 +38,17 @@ exports.addAirman = (request, response) => {
       '${phase}',
       '${status}',
       '${squadron}',
-      current_timestamp,
+      current_timestamp::timestamptz AT TIME ZONE 'CST',
       '${admin}',
-      current_timestamp,
+      current_timestamp::timestamptz AT TIME ZONE 'CST',
       '${admin}',
       TRUE
     )
   `).then(data => {
+    console.log(data)
     response.json({ data, status: true, message: 'Airman added!' })
   }).catch(error => {
+    console.log(error)
     response.json({ data: error, status: false, message: 'Failed to add Airman!' })
   })
 }
@@ -62,7 +65,7 @@ exports.updateAirman = (request, response) => {
       status='${status}',
       phase='${phase}',
       squadron='${squadron}',
-      date_time_updated=current_timestamp,
+      date_time_updated=current_timestamp::timestamptz AT TIME ZONE 'CST',
       updated_by='${admin}'
     WHERE
       cacid='${cacid}'

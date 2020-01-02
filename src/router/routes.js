@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/admin',
-    component: () => import('layouts/SuperAdminLayout.vue'),
+    component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Airman.vue') },
       { path: 'reporting', component: () => import('pages/Reporting.vue') }
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     path: '/user',
-    component: () => import('layouts/SuperAdminLayout.vue'),
+    component: () => import('layouts/UserLayout.vue'),
     children: [
       { path: 'reporting', component: () => import('pages/Reporting.vue') }
     ]

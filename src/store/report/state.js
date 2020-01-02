@@ -1,6 +1,7 @@
 export default function () {
   return {
     reportSignedIn: [],
-    reportSignedOut: []
+    reportSignedOut: [],
+    reportIdle: []
   }
 }

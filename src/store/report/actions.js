@@ -29,3 +29,18 @@ export function reportSignedOut (context) {
     })
   })
 }
+
+export function reportIdle (context) {
+  return new Promise((resolve) => {
+    axios.get(`http://127.0.0.1:8081/api/report/idle`).then(response => {
+      const { data, status } = response.data
+      if (status) {
+        context.commit('setReportIdle', data)
+        resolve(data)
+      } else {
+        context.commit('setReportIdle', [])
+        resolve([])
+      }
+    })
+  })
+}

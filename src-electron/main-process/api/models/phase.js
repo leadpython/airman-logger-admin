@@ -24,9 +24,9 @@ exports.addPhase = (request, response) => {
       '${phase}',
       '${description}',
       '${admin}',
-      current_timestamp,
+      current_timestamp::timestamptz AT TIME ZONE 'CST',
       '${admin}',
-      current_timestamp
+      current_timestamp::timestamptz AT TIME ZONE 'CST'
     );
   `).then(data => {
       response.json({ data, status: true, message: 'Phase added!' })

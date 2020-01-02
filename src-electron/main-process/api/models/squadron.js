@@ -24,9 +24,9 @@ exports.addSquadron = (request, response) => {
       '${squadron}',
       '${description}',
       '${admin}',
-      current_timestamp,
+      current_timestamp::timestamptz AT TIME ZONE 'CST',
       '${admin}',
-      current_timestamp
+      current_timestamp::timestamptz AT TIME ZONE 'CST'
     );
   `).then(data => {
     response.json({ data, status: true, message: 'Squadron added!' })
@@ -42,7 +42,7 @@ exports.updateSquadron = (request, response) => {
     SET
       description='${description}',
       updated_by='${admin}',
-      date_time_updated=current_timestamp
+      date_time_updated=current_timestamp::timestamptz AT TIME ZONE 'CST'
     WHERE
       squadron='${squadron}';
   `).then(data => {

@@ -117,7 +117,7 @@ export default {
     return {
       mode: '/user',
       leftDrawerOpen: false,
-      pageTitle: 'Airman'
+      pageTitle: 'Reporting'
     }
   },
   methods: {

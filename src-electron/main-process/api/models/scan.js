@@ -28,7 +28,7 @@ exports.addScanTransactions = (request, response) => {
           UPDATE airman_master
           SET
             is_in=${!is_in},
-            last_activity=current_timestamp::timestamptz AT TIME ZONE 'CST'
+            last_activity=current_timestamp at time zone 'utc' at time zone 'cst'
           WHERE
             cacid='${cacid}'
         `).then(() => {

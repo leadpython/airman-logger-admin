@@ -48,7 +48,7 @@ export default {
         { name: 'phase', label: 'Phase', align: 'left', field: 'phase', sortable: true },
         { name: 'squadron', label: 'Squadron', align: 'left', field: 'squadron', sortable: true },
         { name: 'status', label: 'Status', align: 'left', field: 'status', sortable: true },
-        { name: 'last_activity', label: 'Last Activity', align: 'left', field: 'last_activity', sortable: true, format: val => `${(new Date(val)).toString()} ${console.log(new Date(val))}` }
+        { name: 'last_activity', label: 'Last Activity', align: 'left', field: 'last_activity', sortable: true, format: val => `${(new Date(val)).toGMTString()} ${console.log(new Date(val))}` }
       ]
     }
   },

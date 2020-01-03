@@ -33,9 +33,9 @@ exports.addRoom = (request, response) => {
       '${floor}',
       '${wing}',
       '${admin}',
-      current_timestamp::timestamptz AT TIME ZONE 'CST',
+      current_timestamp at time zone 'utc' at time zone 'cst',
       '${admin}',
-      current_timestamp::timestamptz AT TIME ZONE 'CST'
+      current_timestamp at time zone 'utc' at time zone 'cst'
     );
   `).then(data => {
     response.json({ data, status: true, message: 'Room added!' })

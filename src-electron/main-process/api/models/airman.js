@@ -38,9 +38,9 @@ exports.addAirman = (request, response) => {
       '${phase}',
       '${status}',
       '${squadron}',
-      current_timestamp::timestamptz AT TIME ZONE 'CST',
+      current_timestamp at time zone 'utc' at time zone 'cst',
       '${admin}',
-      current_timestamp::timestamptz AT TIME ZONE 'CST',
+      current_timestamp at time zone 'utc' at time zone 'cst',
       '${admin}',
       TRUE
     )
@@ -65,7 +65,7 @@ exports.updateAirman = (request, response) => {
       status='${status}',
       phase='${phase}',
       squadron='${squadron}',
-      date_time_updated=current_timestamp::timestamptz AT TIME ZONE 'CST',
+      date_time_updated=current_timestamp at time zone 'utc' at time zone 'cst',
       updated_by='${admin}'
     WHERE
       cacid='${cacid}'

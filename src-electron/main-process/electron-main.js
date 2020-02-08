@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 import api from './api/index.js'
 
 /**
@@ -10,6 +10,9 @@ if (process.env.PROD) {
 }
 
 let mainWindow
+
+const menuTemplate = []
+const menu = Menu.buildFromTemplate(menuTemplate)
 
 function createWindow () {
   /**
@@ -27,13 +30,12 @@ function createWindow () {
     }
   })
 
+  Menu.setApplicationMenu(menu)
   mainWindow.loadURL(process.env.APP_URL)
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-
-  mainWindow.setFullScreen(true)
 
   api.initialize()
 }

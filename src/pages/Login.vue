@@ -5,7 +5,7 @@
       v-model="cacid"
       label="CACID"
       type="password"
-      debounce="500"
+      debounce="5000"
       square
       outlined
       @input="scan"

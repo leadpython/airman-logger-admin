@@ -26,7 +26,7 @@ exports.reportIdle = (request, response) => {
   const month = (today.getMonth() + 1) < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)
   const date = (today.getDate()) < 10 ? '0' + (today.getDate()) : (today.getDate())
   db.many(`
-    SELECT * FROM airman_master WHERE last_activity<=TIMESTAMP '2020-01-03 04:00:00';
+    SELECT * FROM airman_master WHERE last_activity<=TIMESTAMP '${year}-${month}-${date} 04:00:00';
   `).then(data => {
     response.json({ data, status: true, message: 'Report generated!' })
   }).catch(error => {

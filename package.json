@@ -18,7 +18,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "pg-promise": "^10.3.1",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "string-similarity": "^4.0.1"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",

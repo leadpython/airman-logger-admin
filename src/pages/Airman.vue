@@ -2,7 +2,7 @@
   <q-page class="page-container flex column">
     <div class="bg-primary text-black" style="padding: 10px 0 5px 0;">
       <q-toolbar class="flex">
-        <q-input style="width: 100%; background: rgba(255,255,255,0.25);" standout square dark dense flat v-model="searchTerm">
+        <q-input style="width: 100%; background: rgba(255,255,255,0.25);" placeholder="Search by last name..." standout square dark dense flat v-model="searchTerm">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -10,6 +10,7 @@
       </q-toolbar>
       <q-toolbar>
         <q-btn @click="showAddAirman = true" color="white" flat icon="person_add" label="Add Airman" style="border-radius: 0px;" />
+        <q-btn @click="refreshAirmanList" color="white" flat icon="loop" label="Refresh Airman List" style="border-radius: 0px;" />
       </q-toolbar>
     </div>
 
@@ -79,7 +80,7 @@
     <q-dialog v-model="showAirmanProfile" persistent square transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-black" style="width: 400px">
         <q-card-section>
-          <div class="text-h6">{{`${selectedAirman.firstName} ${selectedAirman.lastName}`}}</div>
+          <div class="text-h6">{{`${selectedAirman.first_name} ${selectedAirman.last_name}`}}</div>
         </q-card-section>
 
         <q-card-section>
@@ -126,14 +127,25 @@
       </q-card>
     </q-dialog>
 
+    <q-inner-loading :showing="isLoading">
+      <q-spinner
+        color="primary"
+        size="100px"
+        :thickness="10"
+      />
+    </q-inner-loading>
+
   </q-page>
 </template>
 
 <script>
+import stringSimilarity from 'string-similarity'
+
 export default {
   name: 'PageAirman',
   data () {
     return {
+      isLoading: false,
       searchTerm: '',
       cacid: '',
       firstName: '',
@@ -171,7 +183,16 @@ export default {
   },
   computed: {
     airmen () {
-      return this.$store.getters['airman/airmen'] || []
+      const self = this
+      if (self.searchTerm.replace(/ /g, '').length === 0) {
+        return self.$store.getters['airman/airmen'] || []
+      }
+      return (this.$store.getters['airman/airmen']).filter((airman) => {
+        let similarity = stringSimilarity.compareTwoStrings(airman.last_name, self.searchTerm)
+        if (similarity >= 0.5) {
+          return airman
+        }
+      }) || []
     },
     roomOptions () {
       const roomOptions = []
@@ -206,6 +227,13 @@ export default {
     }
   },
   methods: {
+    refreshAirmanList () {
+      const self = this
+      self.isLoading = true
+      self.$store.dispatch('airman/getAirmen').then(() => {
+        self.isLoading = false
+      })
+    },
     addAirman () {
       const self = this
       self.isAddingAirman = true

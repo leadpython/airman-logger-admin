@@ -3,7 +3,7 @@ const db = require('./db.js')
 exports.addScanTransactions = (request, response) => {
   const { cacid } = request.body
   db.many(`
-    SELECT airman_internal_id, is_in, first_name, last_name FROM airman_master WHERE cacid='${cacid}';
+    SELECT airman_internal_id, is_in, first_name, last_name FROM airman_master WHERE cacid='${cacid.toUpperCase()}';
   `).then(data => {
     if (data.length <= 0) {
       response.json({ data, status: false, message: 'Airman not found!' })
@@ -30,7 +30,7 @@ exports.addScanTransactions = (request, response) => {
             is_in=${!is_in},
             last_activity=current_timestamp at time zone 'utc' at time zone 'cst'
           WHERE
-            cacid='${cacid}'
+            cacid='${cacid.toUpperCase()}'
         `).then(() => {
           response.json({ data: {
             lastName: last_name,

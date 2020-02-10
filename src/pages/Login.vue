@@ -5,7 +5,7 @@
       v-model="cacid"
       label="CACID"
       type="password"
-      debounce="5000"
+      debounce="500"
       square
       outlined
       @input="scan"
@@ -69,7 +69,7 @@ export default {
     scan () {
       const self = this
       self.isLoading = true
-      self.$store.dispatch('admin/authenticateAdmin', self.cacid).then(result => {
+      self.$store.dispatch('admin/authenticateAdmin', self.cacid.toLowerCase()).then(result => {
         const { data: admin, status } = result
         self.isLoading = false
         if (status) {
@@ -90,7 +90,7 @@ export default {
       const self = this
       self.isLoading = true
       self.$store.dispatch('admin/registerAdmin', {
-        cacid: self.registerCacid,
+        cacid: self.registerCacid.toUpperCase(),
         admin_name: self.registerAdminName,
         permission_level: 2
       }).then(data => {

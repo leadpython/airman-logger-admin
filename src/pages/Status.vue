@@ -53,19 +53,11 @@
         <q-card-section>
           <div class="add-status-row">
             <label>Status Number</label>
-            <q-input v-model="selectedStatus.status" square dense outlined :disable="!isEditMode" />
+            <q-input v-model="selectedStatus.status" square dense outlined :disable="true" />
           </div>
           <div class="add-status-row">
             <label>Description</label>
             <q-input v-model="selectedStatus.description" square dense outlined :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Floor</label>
-            <q-input v-model="selectedStatus.floor" square dense outlined :disable="!isEditMode" />
-          </div>
-          <div class="add-status-row">
-            <label>Wing</label>
-            <q-input v-model="selectedStatus.wing" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-status-row">
             <label style="color: red;">{{errorMessage}}</label>
@@ -117,9 +109,7 @@ export default {
       self.isAddingStatus = true
       self.$store.dispatch('status/addStatus', {
         status: self.status,
-        description: self.description,
-        floor: self.floor,
-        wing: self.wing
+        description: self.description
       }).then(data => {
         self.isAddingStatus = false
         self.status = ''
@@ -128,6 +118,7 @@ export default {
     },
     editStatus () {
       this.isEditMode = false
+      console.log(this.selectedStatus)
       this.$store.dispatch('status/updateStatus', this.selectedStatus)
     },
     viewStatus (event, row) {
@@ -138,7 +129,7 @@ export default {
     removeStatus () {
       const self = this
       self.isEditMode = false
-      self.$store.dispatch('status/removePhase', self.selectedStatus).then(data => {
+      self.$store.dispatch('status/removeStatus', self.selectedStatus).then(data => {
         const { status } = data
         if (status) {
           self.showStatusProfile = false

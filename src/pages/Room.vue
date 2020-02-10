@@ -55,7 +55,7 @@
     <q-dialog v-model="showRoomProfile" persistent square transition-show="scale" transition-hide="scale">
       <q-card class="bg-white text-black" style="width: 400px">
         <q-card-section>
-          <div class="text-h6">Room {{`${selectedRoom.room}`}}</div>
+          <div class="text-h6">Room {{`${selectedRoom.room_number}`}}</div>
         </q-card-section>
 
         <q-card-section>
@@ -150,7 +150,7 @@ export default {
     removeRoom () {
       const self = this
       self.isEditMode = false
-      self.$store.dispatch('room/removePhase', self.selectedRoom).then(data => {
+      self.$store.dispatch('room/removeRoom', self.selectedRoom).then(data => {
         const { status } = data
         if (status) {
           self.showRoomProfile = false

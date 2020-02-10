@@ -138,7 +138,7 @@ export default {
     removeSquadron () {
       const self = this
       self.isEditMode = false
-      self.$store.dispatch('squadron/removePhase', self.selectedSquadron).then(data => {
+      self.$store.dispatch('squadron/removeSquadron', self.selectedSquadron).then(data => {
         const { status } = data
         if (status) {
           self.showSquadronProfile = false

@@ -2,7 +2,7 @@
   <q-page class="page-container flex column">
     <div class="bg-primary text-black" style="padding: 10px 0 5px 0;">
       <q-toolbar class="flex">
-        <q-input style="width: 100%; background: rgba(255,255,255,0.25);" placeholder="Search by last name..." standout square dark dense flat v-model="searchTerm">
+        <q-input style="width: 100%; background: rgba(255,255,255,0.25);" placeholder="Search by last name..." standout square dark dense flat v-model="searchTerm" maxlength="30" mask="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -41,15 +41,15 @@
           </div>
           <div class="add-airman-row">
             <label>First Name</label>
-            <q-input v-model="firstName" square dense outlined />
+            <q-input v-model="firstName" square dense outlined maxlength="30" mask="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
           </div>
           <div class="add-airman-row">
             <label>Last Name</label>
-            <q-input v-model="lastName" square dense outlined />
+            <q-input v-model="lastName" square dense outlined maxlength="30" mask="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
           </div>
           <div class="add-airman-row">
             <label>Middle Name</label>
-            <q-input v-model="middleName" square dense outlined />
+            <q-input v-model="middleName" square dense outlined maxlength="30" mask="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
           </div>
           <div class="add-airman-row">
             <label>Room #</label>
@@ -188,7 +188,7 @@ export default {
         return self.$store.getters['airman/airmen'] || []
       }
       return (this.$store.getters['airman/airmen']).filter((airman) => {
-        let similarity = stringSimilarity.compareTwoStrings(airman.last_name, self.searchTerm)
+        let similarity = stringSimilarity.compareTwoStrings(airman.last_name.toUpperCase(), self.searchTerm.toUpperCase())
         if (similarity >= 0.5) {
           return airman
         }

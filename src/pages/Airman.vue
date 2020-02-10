@@ -199,14 +199,14 @@ export default {
       for (let i = 0; i < this.$store.getters['room/rooms'].length; i++) {
         roomOptions.push(this.$store.getters['room/rooms'][i].room_number)
       }
-      return roomOptions
+      return roomOptions.sort()
     },
     phaseOptions () {
       const phaseOptions = []
       for (let i = 0; i < this.$store.getters['phase/phases'].length; i++) {
         phaseOptions.push(this.$store.getters['phase/phases'][i].phase)
       }
-      return phaseOptions
+      return phaseOptions.sort()
     },
     squadronOptions () {
       const squadronOptions = []
@@ -220,7 +220,7 @@ export default {
       for (let i = 0; i < this.$store.getters['status/statuses'].length; i++) {
         statusOptions.push(this.$store.getters['status/statuses'][i].status)
       }
-      return statusOptions
+      return statusOptions.sort()
     },
     cannotAdd () {
       return this.cacid.length === 0 || this.firstName.length === 0 || this.lastName.length === 0 || this.middleName.length === 0 || this.room.length === 0 || this.phase.length === 0 || this.squadron.length === 0 || this.status.length === 0

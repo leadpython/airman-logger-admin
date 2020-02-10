@@ -69,7 +69,7 @@ export default {
     scan () {
       const self = this
       self.isLoading = true
-      self.$store.dispatch('admin/authenticateAdmin', self.cacid.toLowerCase()).then(result => {
+      self.$store.dispatch('admin/authenticateAdmin', self.cacid.toUpperCase()).then(result => {
         const { data: admin, status } = result
         self.isLoading = false
         if (status) {

@@ -28,7 +28,11 @@
       content-class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header></q-item-label>
+        <q-item-label header>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <img style="display: block; width: auto; height: 150px;" src="./../assets/background.png" />
+          </div>
+        </q-item-label>
         <q-item clickable @click="navigate('', 'Airman')">
           <q-item-section avatar>
             <q-icon name="person_outline" />

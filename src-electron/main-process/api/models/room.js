@@ -4,9 +4,7 @@ exports.getRooms = (request, response) => {
   db.many(`
     SELECT
       room_number,
-      description,
-      floor_number,
-      wing
+      description
     FROM room;
   `).then(data => {
     response.json({ data, status: true, message: 'Rooms retrieved!' })
@@ -16,13 +14,11 @@ exports.getRooms = (request, response) => {
 }
 
 exports.addRoom = (request, response) => {
-  const { room, description, floor, wing, admin } = request.body
+  const { room, description, admin } = request.body
   db.none(`
     INSERT INTO room (
       room_number,
       description,
-      floor_number,
-      wing,
       created_by,
       date_time_created,
       updated_by,
@@ -30,12 +26,10 @@ exports.addRoom = (request, response) => {
     ) VALUES (
       '${room}',
       '${description}',
-      '${floor}',
-      '${wing}',
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst',
+      now(),
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst'
+      now()
     );
   `).then(data => {
     response.json({ data, status: true, message: 'Room added!' })
@@ -45,17 +39,15 @@ exports.addRoom = (request, response) => {
 }
 
 exports.updateRoom = (request, response) => {
-  const { room, description, floor, wing, admin } = request.body
+  const { room_number, description, admin } = request.body
   db.none(`
     UPDATE room
     SET
       description='${description}',
-      floor_number='${floor}',
-      wing='${wing}',
       updated_by='${admin}',
-      date_time_updated=current_timestamp
+      date_time_updated=now()
     WHERE
-      room='${room}';
+      room_number='${room_number}';
   `).then(data => {
     response.json({ data, status: true, message: 'Room updated!' })
   }).catch(error => {
@@ -64,9 +56,9 @@ exports.updateRoom = (request, response) => {
 }
 
 exports.removeRoom = (request, response) => {
-  const { room } = request.body
+  const { room_number } = request.body
   db.none(`
-    DELETE FROM room WHERE room='${room}'
+    DELETE FROM room WHERE room_number='${room_number}'
   `).then(data => {
     response.json({ data, status: true, message: 'Room removed!' })
   }).catch(error => {

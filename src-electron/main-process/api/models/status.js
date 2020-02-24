@@ -24,9 +24,9 @@ exports.addStatus = (request, response) => {
       '${status}',
       '${description}',
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst',
+      now(),
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst'
+      now()
     );
   `).then(data => {
     response.json({ data, status: true, message: 'Status added!' })
@@ -42,7 +42,7 @@ exports.updateStatus = (request, response) => {
     SET
       description='${description}',
       updated_by='${admin}',
-      date_time_updated=current_timestamp at time zone 'utc' at time zone 'cst'
+      date_time_updated=now()
     WHERE
       status='${status}';
   `).then(data => {

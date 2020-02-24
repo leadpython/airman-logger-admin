@@ -33,7 +33,7 @@
           </div>
           <div class="add-admin-row">
             <label>Admin Name</label>
-            <q-input v-model="admin_name" square dense outlined />
+            <q-input v-model="admin_name" @input="makeUppercase" square dense outlined />
           </div>
           <div class="add-admin-row">
             <label>Permission Level</label>
@@ -99,7 +99,7 @@ export default {
       },
       columns: [
         { name: 'admin_name', label: 'Admin', align: 'left', field: 'admin_name' },
-        { name: 'permission_level', label: 'Permission Level', align: 'left', field: 'permission_level' }
+        { name: 'permission_level', label: 'Permission Level', align: 'left', field: 'permission_level', format: val => `${val === 2 ? 'Super Admin' : val === 1 ? 'Admin' : 'Regular User'}` }
       ]
     }
   },
@@ -112,6 +112,10 @@ export default {
     this.$store.dispatch('admin/getAdmins')
   },
   methods: {
+    makeUppercase () {
+      const self = this
+      self.admin_name = self.admin_name.toUpperCase()
+    },
     removeAdmin () {
       const self = this
       self.$store.dispatch('admin/removeAdmin', { admin_name: self.selectedAdmin.admin_name })

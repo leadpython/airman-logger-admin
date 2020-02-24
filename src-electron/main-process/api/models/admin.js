@@ -19,7 +19,7 @@ exports.registerAdmin = (request, response) => {
       permission_level
     ) VALUES (
       '${admin_name}',
-      '${cacid}',
+      '${cacid.toUpperCase()}',
       ${permission_level}
     )
   `).then(data => {
@@ -36,7 +36,7 @@ exports.authenticateAdmin = (request, response) => {
   `).then(data => {
     for (let i = 0; i < data.length; i++) {
       let admin = data[i]
-      if (cacid === admin.cacid) {
+      if (cacid.toUpperCase() === admin.cacid.toUpperCase()) {
         response.json({ data: {
           admin_name: admin.admin_name,
           permission_level: admin.permission_level

@@ -86,6 +86,9 @@ router.post('/status/remove', (request, response) => {
 router.post('/scan', (request, response) => {
   scan.addScanTransactions(request, response)
 })
+router.post('/scan/airman', (request, response) => {
+  scan.getAirmanScanTransactions(request, response)
+})
 
 // REPORT
 router.get('/report/signed-in', (request, response) => {

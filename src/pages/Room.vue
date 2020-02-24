@@ -35,14 +35,6 @@
             <label>Description</label>
             <q-input v-model="description" square dense outlined />
           </div>
-          <div class="add-room-row">
-            <label>Floor</label>
-            <q-input v-model="floor" square dense outlined />
-          </div>
-          <div class="add-room-row">
-            <label>Wing</label>
-            <q-input v-model="wing" square dense outlined />
-          </div>
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white text-primary">
@@ -61,19 +53,11 @@
         <q-card-section>
           <div class="add-room-row">
             <label>Room Number</label>
-            <q-input v-model="selectedRoom.room" square dense outlined :disable="!isEditMode" />
+            <q-input v-model="selectedRoom.room_number" square dense outlined :disable="true" />
           </div>
           <div class="add-room-row">
             <label>Description</label>
             <q-input v-model="selectedRoom.description" square dense outlined :disable="!isEditMode" />
-          </div>
-          <div class="add-room-row">
-            <label>Floor</label>
-            <q-input v-model="selectedRoom.floor" square dense outlined :disable="!isEditMode" />
-          </div>
-          <div class="add-room-row">
-            <label>Wing</label>
-            <q-input v-model="selectedRoom.wing" square dense outlined :disable="!isEditMode" />
           </div>
           <div class="add-room-row">
             <label style="color: red;">{{errorMessage}}</label>
@@ -100,8 +84,6 @@ export default {
     return {
       room: '',
       description: '',
-      floor: '',
-      wing: '',
       showRoomProfile: false,
       showAddRoom: false,
       selectedRoom: {},
@@ -112,9 +94,7 @@ export default {
       },
       columns: [
         { name: 'room_number', label: 'Room Number', align: 'left', field: 'room_number' },
-        { name: 'description', label: 'Description', align: 'left', field: 'description' },
-        { name: 'floor_number', label: 'Floor Number', align: 'left', field: 'floor_number' },
-        { name: 'wing', label: 'Wing Number', align: 'left', field: 'wing' }
+        { name: 'description', label: 'Description', align: 'left', field: 'description' }
       ]
     }
   },

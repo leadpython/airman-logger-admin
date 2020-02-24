@@ -12,14 +12,13 @@ exports.getAirmen = (request, response) => {
 }
 
 exports.addAirman = (request, response) => {
-  const { cacid, last_name, first_name, middle_name, room_number, phase, status, squadron, admin } = request.body
+  const { cacid, last_name, first_name, room_number, phase, status, squadron, admin } = request.body
   console.log(request.body)
   db.none(`
     INSERT INTO airman_master (
       cacid,
       last_name,
       first_name,
-      middle_name,
       room_number,
       phase,
       status,
@@ -33,39 +32,35 @@ exports.addAirman = (request, response) => {
       '${cacid}',
       '${last_name}',
       '${first_name}',
-      '${middle_name}',
       '${room_number}',
       '${phase}',
       '${status}',
       '${squadron}',
-      current_timestamp at time zone 'utc' at time zone 'cst',
+      now(),
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst',
+      now(),
       '${admin}',
       TRUE
     )
   `).then(data => {
-    console.log(data)
     response.json({ data, status: true, message: 'Airman added!' })
   }).catch(error => {
-    console.log(error)
     response.json({ data: error, status: false, message: 'Failed to add Airman!' })
   })
 }
 
 exports.updateAirman = (request, response) => {
-  const { cacid, last_name, first_name, middle_name, room_number, phase, status, squadron, admin } = request.body
+  const { cacid, last_name, first_name, room_number, phase, status, squadron, admin } = request.body
   db.none(`
     UPDATE airman_master
     SET
       last_name='${last_name}',
       first_name='${first_name}',
-      middle_name='${middle_name}',
       room_number='${room_number}',
       status='${status}',
       phase='${phase}',
       squadron='${squadron}',
-      date_time_updated=current_timestamp at time zone 'utc' at time zone 'cst',
+      date_time_updated=now(),
       updated_by='${admin}'
     WHERE
       cacid='${cacid}'

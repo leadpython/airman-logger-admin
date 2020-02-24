@@ -3,38 +3,36 @@ const db = require('./db.js')
 exports.addScanTransactions = (request, response) => {
   const { cacid } = request.body
   db.many(`
-    SELECT airman_internal_id, is_in, first_name, last_name FROM airman_master WHERE cacid='${cacid.toUpperCase()}';
+    SELECT airman_internal_id, is_in, first_name, last_name, phase FROM airman_master WHERE cacid='${cacid.toUpperCase()}';
   `).then(data => {
     if (data.length <= 0) {
       response.json({ data, status: false, message: 'Airman not found!' })
     } else {
-      const { airman_internal_id, is_in, last_name, first_name } = data[0]
+      const { airman_internal_id, is_in, last_name, first_name, phase } = data[0]
       db.none(`
         INSERT INTO scan_transactions (
           airman_internal_id,
           cacid,
           is_in,
-          date,
-          time
+          scan_timestamp
         ) VALUES (
           '${airman_internal_id}',
           '${cacid}',
           ${!is_in},
-          current_date,
-          current_time
+          now()
         );
       `).then(() => {
         db.none(`
           UPDATE airman_master
           SET
             is_in=${!is_in},
-            last_activity=current_timestamp at time zone 'utc' at time zone 'cst'
+            last_activity=now()
           WHERE
             cacid='${cacid.toUpperCase()}'
         `).then(() => {
           response.json({ data: {
-            lastName: last_name,
-            firstName: first_name,
+            last_name,
+            first_name,
             isIn: !is_in,
             date: (new Date())
           }, status: true, message: 'Airman found!' })
@@ -44,6 +42,21 @@ exports.addScanTransactions = (request, response) => {
       }).catch(error => {
         console.log(error)
       })
+    }
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Airman not found!' })
+  })
+}
+
+exports.getAirmanScanTransactions = (request, response) => {
+  const { cacid } = request.body
+  db.many(`
+    SELECT is_in, scan_timestamp FROM scan_transactions WHERE cacid='${cacid}';
+  `).then(data => {
+    if (data.length <= 0) {
+      response.json({ data, status: false, message: 'Airman not found!' })
+    } else {
+      response.json({ data: data, status: true, message: 'Airman found!' })
     }
   }).catch(error => {
     response.json({ data: error, status: false, message: 'Airman not found!' })

@@ -6,6 +6,7 @@ export function getAirmen (context) {
       const { data, status } = response.data
       if (status) {
         context.commit('setAirmen', data)
+        console.log(data)
         resolve(data)
       } else {
         context.commit('setAirmen', [])

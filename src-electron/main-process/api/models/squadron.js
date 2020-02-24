@@ -24,14 +24,14 @@ exports.addSquadron = (request, response) => {
       '${squadron}',
       '${description}',
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst',
+      now(),
       '${admin}',
-      current_timestamp at time zone 'utc' at time zone 'cst'
+      now()
     );
   `).then(data => {
     response.json({ data, status: true, message: 'Squadron added!' })
   }).catch(error => {
-    response.json({ data: error, status: false, message: 'Failed to retrieve squadrons!' })
+    response.json({ data: error, status: false, message: 'Failed to addd squadron!' })
   })
 }
 
@@ -42,7 +42,7 @@ exports.updateSquadron = (request, response) => {
     SET
       description='${description}',
       updated_by='${admin}',
-      date_time_updated=current_timestamp at time zone 'utc' at time zone 'cst'
+      date_time_updated=now()
     WHERE
       squadron='${squadron}';
   `).then(data => {

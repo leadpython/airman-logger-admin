@@ -35,13 +35,16 @@
         </q-card-section>
 
         <q-card-section>
-          <div class="add-airman-row">
-            <label>CACID</label>
-            <q-input v-model="cacid" square dense outlined />
+          <div class="add-airman-row" style="padding-bottom: 25px; margin-bottom: 25px; border-bottom: 1px solid rgb(200,200,200);">
+            <label style="font-weight: bold; margin-bottom: 10px;">CACID</label>
+            <label>Front</label>
+            <q-input v-model="check3dString" @input="check3d" type="password" square dense outlined />
+            <label style="margin-top: 5px;">Back</label>
+            <q-input v-model="cacid" type="password" square dense outlined />
           </div>
           <div class="add-airman-row">
             <label>First Name</label>
-            <q-input v-model="firstName" @input="check3d" square dense outlined />
+            <q-input v-model="firstName" square dense outlined />
           </div>
           <div class="add-airman-row">
             <label>Last Name</label>
@@ -209,6 +212,7 @@ export default {
     return {
       isLoading: false,
       searchTerm: '',
+      check3dString: '',
       cacid: '',
       firstName: '',
       lastName: '',
@@ -316,7 +320,7 @@ export default {
     },
     check3d () {
       const self = this
-      let firstNameInput = self.firstName.split(' ').filter((item) => {
+      let firstNameInput = self.check3dString.split(' ').filter((item) => {
         if (item.length > 0) {
           return item
         }

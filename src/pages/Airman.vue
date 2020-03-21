@@ -100,7 +100,7 @@
         <q-card-section>
           <div class="add-airman-row">
             <label>CACID</label>
-            <q-input v-model="selectedAirman.cacid" square dense outlined :disable="!isEditMode" />
+            <q-input v-model="selectedAirman.cacid" square dense outlined type="password" :disable="!isEditMode" />
           </div>
           <div class="add-airman-row">
             <label>First Name</label>

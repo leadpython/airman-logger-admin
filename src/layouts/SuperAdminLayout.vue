@@ -96,6 +96,15 @@
             <q-item-label caption>Generate reports.</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item clickable @click="navigate('importer', 'Importer')">
+          <q-item-section avatar>
+            <q-icon name="assignment" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Importer</q-item-label>
+            <q-item-label caption>Import data.</q-item-label>
+          </q-item-section>
+        </q-item>
         <q-item clickable @click="navigate('user', 'Admins')">
           <q-item-section avatar>
             <q-icon name="build" />

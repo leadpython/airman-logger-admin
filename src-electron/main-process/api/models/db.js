@@ -4,6 +4,6 @@ const db = pgp({
   port: 5432,
   database: 'airman_logger',
   user: 'postgres',
-  password: '22hz5aZ7k909t7M'
+  password: '22hz5az7k909t7m'
 })
 module.exports = db;

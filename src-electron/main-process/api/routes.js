@@ -7,6 +7,7 @@ const squadron = require('./models/squadron.js')
 const status = require('./models/status.js')
 const scan = require('./models/scan.js')
 const report = require('./models/report.js')
+const importer = require('./models/importer.js')
 const admin = require('./models/admin.js')
 
 // AIRMAN
@@ -114,6 +115,14 @@ router.post('/admin/authenticate', (request, response) => {
 })
 router.post('/admin/remove', (request, response) => {
   admin.removeAdmin(request, response)
+})
+
+// IMPORTER importer
+router.post('/importer/import-data', (request, response) => {
+  importer.importData(request, response)
+})
+router.post('/importer/import-rooms', (request, response) => {
+  importer.importRooms(request, response)
 })
 
 module.exports = router;

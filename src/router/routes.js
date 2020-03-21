@@ -18,6 +18,7 @@ const routes = [
       { path: 'status', component: () => import('pages/Status.vue') },
       { path: 'activity', component: () => import('pages/Activity.vue') },
       { path: 'user', component: () => import('pages/User.vue') },
+      { path: 'importer', component: () => import('pages/Importer.vue') },
       { path: 'reporting', component: () => import('pages/Reporting.vue') }
     ]
   },

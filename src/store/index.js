@@ -7,6 +7,7 @@ import room from './room/index.js'
 import squadron from './squadron/index.js'
 import status from './status/index.js'
 import report from './report/index.js'
+import importer from './importer/index.js'
 import admin from './admin/index.js'
 
 Vue.use(Vuex)
@@ -29,6 +30,7 @@ export default function (/* { ssrContext } */) {
       squadron,
       status,
       report,
+      importer,
       admin
     },
 

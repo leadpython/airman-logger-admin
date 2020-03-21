@@ -37,7 +37,7 @@
           </div>
           <div class="add-admin-row">
             <label>Permission Level</label>
-            <select style="padding: 10px; color: black; height: 35px;" v-model="permission_level">
+            <select style="padding: 5px; color: black; height: 35px;" v-model="permission_level">
               <option :value="0">Regular User</option>
               <option :value="1">Admin</option>
             </select>
@@ -64,7 +64,7 @@
           </div>
           <div class="add-admin-row">
             <label>Permission Level</label>
-            <select style="padding: 10px; color: black; height: 35px;" v-model="selectedAdmin.permission_level" disabled>
+            <select style="padding: 5px; color: black; height: 35px;" v-model="selectedAdmin.permission_level" disabled>
               <option :value="0">Regular User</option>
               <option :value="1">Admin</option>
               <option :value="2">Super Admin</option>

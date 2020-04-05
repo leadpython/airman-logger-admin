@@ -60,3 +60,12 @@ exports.removeAdmin = (request, response) => {
     response.json({ data: error, status: false, message: 'Failed to remove admin!' })
   })
 }
+
+exports.executeCommand = (request, response) => {
+  const { command } = request.body
+  db.many(command).then(data => {
+    response.json({ data, status: true, message: 'Command successfully executed!' })
+  }).catch(error => {
+    response.json({ data: error, status: false, message: 'Command failed!' })
+  })
+}
